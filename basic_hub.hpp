@@ -10,7 +10,8 @@ namespace bunsan
 	class basic_hub
 	{
 	public:
-		virtual void init(const boost::property_tree::ptree &config)=0;
+		virtual void clear()=0;
+		//virtual void reinit(const boost::property_tree::ptree &config)=0;
 		virtual void add_resource(const std::string &type, const std::string &uri, const std::string &capacity)=0;
 		virtual void remove_resource(const std::string &type, const std::string &uri)=0;
 		virtual void set_capacity(const std::string &type, const std::string &uri, const std::string &capacity)=0;

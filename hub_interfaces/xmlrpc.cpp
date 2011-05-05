@@ -11,6 +11,29 @@
 
 #include "bunsan.hpp"
 
+class method_clear: public xmlrpc_c::method2
+{
+public:
+	method_clear(bunsan::hub_ptr hub__):hub_(hub__){}
+	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	{
+		DLOG();
+		try
+		{
+			param_list.verifyEnd(0);
+			hub_->clear();
+			*result = xmlrpc_c::value_nil();
+		}
+		catch(std::exception &e)
+		{
+			SLOG("fault: \""<<e.what()<<"\"");
+			throw xmlrpc_c::fault(e.what());
+		}
+	}
+private:
+	bunsan::hub_ptr hub_;
+};
+
 class method_add_resource: public xmlrpc_c::method2
 {
 public:
@@ -115,10 +138,12 @@ private:
 bunsan::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__), registry(new xmlrpc_c::registry)
 {
 	xmlrpc_c::methodPtr
+		clear(new method_clear(hub_)),
 		add_resource(new method_add_resource(hub_)),
 		remove_resource(new method_remove_resource(hub_)),
 		set_capacity(new method_set_capacity(hub_)),
 		get_resource(new method_get_resource(hub_));
+	registry->addMethod("clear", clear);
 	registry->addMethod("add_resource", add_resource);
 	registry->addMethod("remove_resource", remove_resource);
 	registry->addMethod("set_capacity", set_capacity);

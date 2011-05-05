@@ -11,7 +11,7 @@
 
 namespace bunsan
 {
-	typedef std::vector<unsigned char> bytes;
+	//typedef std::vector<unsigned char> bytes;
 	/*class id
 	{
 	public:

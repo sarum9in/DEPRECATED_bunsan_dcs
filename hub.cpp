@@ -4,14 +4,17 @@
 #include <stdexcept>
 
 #include "hubs/local.hpp"
+#include "hubs/xmlrpc_proxy.hpp"
 
-bunsan::hub::hub(const boost::property_tree::ptree &config)
+std::unique_ptr<bunsan::basic_hub> get_impl(const std::string &type, const boost::property_tree::ptree &config)
 {
-	std::string type = config.get<std::string>("type");
-	SLOG("trying to create hub implementation"+type);
 	if (type=="local")
 	{
-		pimpl.reset(new bunsan::hubs::local(config.get_child("config")));
+		return std::unique_ptr<bunsan::basic_hub>(new bunsan::hubs::local(config.get_child("config")));
+	}
+	else if (type=="xmlrpc_proxy")
+	{
+		return std::unique_ptr<bunsan::basic_hub>(new bunsan::hubs::xmlrpc_proxy(config.get_child("config")));
 	}
 	else
 	{
@@ -19,9 +22,51 @@ bunsan::hub::hub(const boost::property_tree::ptree &config)
 	}
 }
 
+bunsan::hub::hub(const boost::property_tree::ptree &config)
+{
+	const std::string type = config.get<std::string>("type");
+	SLOG("trying to create hub implementation \""<<type<<'"');
+	if (type=="none")
+	{
+		DLOG(no implementation was selected: waiting for "reinit" call);
+	}
+	else
+	{
+		pimpl = get_impl(type, config);
+	}
+	/*else if (type=="local")
+	{
+		pimpl.reset(new bunsan::hubs::local(config.get_child("config")));
+	}
+	else
+	{
+		throw std::out_of_range("\""+type+"\" was not implemented");
+	}*/
+}
+
+void bunsan::hub::reinit(const boost::property_tree::ptree &config)
+{
+	const std::string type = config.get<std::string>("type");
+	SLOG("trying to create hub implementation \""<<type<<'"');
+	if (type=="none")
+	{
+		DLOG(no implementation was selected: waiting for "reinit" call);
+	}
+	else
+	{
+		pimpl = get_impl(type, config);
+	}
+}
+
 bunsan::hub::~hub()
 {
 	DLOG(hub destruction);
+}
+
+void bunsan::hub::clear()
+{
+	DLOG(clearing);
+	pimpl->clear();
 }
 
 void bunsan::hub::add_resource_(const std::string &type, const std::string &uri, const std::string &capacity)
