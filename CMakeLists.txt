@@ -38,5 +38,3 @@ aux_source_directory(hub_interfaces hub_interfaces_srcs)
 add_executable(${PROJECT_NAME} ${srcs} ${hubs_srcs} ${hub_interfaces_srcs})
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${xmlrpc_link_lib})
 
-## vim:nocindent
-

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <exception>
 
 #include <boost/program_options.hpp>
 #include <boost/property_tree/ptree.hpp>
