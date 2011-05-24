@@ -7,6 +7,7 @@
 #include <map>
 #include <utility>
 
+#include <boost/noncopyable.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/classification.hpp>
@@ -59,16 +60,9 @@ namespace bunsan
 	 * You should create this object and perform all operations through it.
 	 * It is non-copyable.
 	 */
-	class hub
+	class hub: private boost::noncopyable
 	{
 	public:
-		// non-copyable
-		hub()=delete;
-		hub(const hub &)=delete;
-		hub(const hub &&)=delete;
-		hub &operator=(const hub &)=delete;
-		hub &operator=(const hub &&)=delete;
-		// end non-copyable
 		// construction
 		explicit hub(const boost::property_tree::ptree &config);
 		/*!

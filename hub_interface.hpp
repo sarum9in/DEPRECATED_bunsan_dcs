@@ -1,6 +1,7 @@
 #ifndef HUB_INTERFACE_HPP
 #define HUB_INTERFACE_HPP
 
+#include <boost/noncopyable.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 #include "hub.hpp"
@@ -8,16 +9,9 @@
 
 namespace bunsan
 {
-	class hub_interface
+	class hub_interface: private boost::noncopyable
 	{
 	public:
-		//non-copyable
-		hub_interface()=delete;
-		hub_interface(const hub_interface &)=delete;
-		hub_interface(const hub_interface &&)=delete;
-		hub_interface &operator=(const hub_interface &)=delete;
-		hub_interface &operator=(const hub_interface &&)=delete;
-		//end non-copyable
 		explicit hub_interface(const boost::property_tree::ptree &config, hub_ptr);
 		~hub_interface();
 		void serve();
