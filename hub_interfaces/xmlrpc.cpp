@@ -9,12 +9,12 @@
 #include <xmlrpc-c/registry.hpp>
 #include <xmlrpc-c/girerr.hpp>
 
-#include "bunsan.hpp"
+#include "util.hpp"
 
 class method_clear: public xmlrpc_c::method2
 {
 public:
-	method_clear(bunsan::hub_ptr hub__):hub_(hub__){}
+	method_clear(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
 	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 	{
 		DLOG();
@@ -31,13 +31,13 @@ public:
 		}
 	}
 private:
-	bunsan::hub_ptr hub_;
+	bunsan::dcs::hub_ptr hub_;
 };
 
 class method_add_resource: public xmlrpc_c::method2
 {
 public:
-	method_add_resource(bunsan::hub_ptr hub__):hub_(hub__){}
+	method_add_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
 	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 	{
 		DLOG();
@@ -57,13 +57,13 @@ public:
 		}
 	}
 private:
-	bunsan::hub_ptr hub_;
+	bunsan::dcs::hub_ptr hub_;
 };
 
 class method_remove_resource: public xmlrpc_c::method2
 {
 public:
-	method_remove_resource(bunsan::hub_ptr hub__):hub_(hub__){}
+	method_remove_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
 	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 	{
 		DLOG();
@@ -82,13 +82,13 @@ public:
 		}
 	}
 private:
-	bunsan::hub_ptr hub_;
+	bunsan::dcs::hub_ptr hub_;
 };
 
 class method_set_capacity: public xmlrpc_c::method2
 {
 public:
-	method_set_capacity(bunsan::hub_ptr hub__):hub_(hub__){}
+	method_set_capacity(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
 	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 	{
 		DLOG();
@@ -108,13 +108,13 @@ public:
 		}
 	}
 private:
-	bunsan::hub_ptr hub_;
+	bunsan::dcs::hub_ptr hub_;
 };
 
 class method_get_resource: public xmlrpc_c::method2
 {
 public:
-	method_get_resource(bunsan::hub_ptr hub__):hub_(hub__){}
+	method_get_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
 	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 	{
 		DLOG();
@@ -131,11 +131,11 @@ public:
 		}
 	}
 private:
-	bunsan::hub_ptr hub_;
+	bunsan::dcs::hub_ptr hub_;
 };
 
 
-bunsan::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__), registry(new xmlrpc_c::registry)
+bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__), registry(new xmlrpc_c::registry)
 {
 	xmlrpc_c::methodPtr
 		clear(new method_clear(hub_)),
@@ -151,7 +151,7 @@ bunsan::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config
 	server.reset(new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryPtr(registry).portNumber(config.get<unsigned int>("server.port"))));
 }
 
-void bunsan::hub_interfaces::xmlrpc::serve()
+void bunsan::dcs::hub_interfaces::xmlrpc::serve()
 {
 	server->run();
 }

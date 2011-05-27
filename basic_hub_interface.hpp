@@ -3,7 +3,7 @@
 
 #include "hub.hpp"
 
-namespace bunsan
+namespace bunsan{namespace dcs
 {
 	class basic_hub_interface
 	{
@@ -13,7 +13,7 @@ namespace bunsan
 		virtual ~basic_hub_interface()=0;
 	};
 	inline basic_hub_interface::~basic_hub_interface(){}
-}
+}}
 
 #endif //BASIC_HUB_INTERFACE_HPP
 

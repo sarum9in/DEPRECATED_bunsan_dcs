@@ -7,7 +7,7 @@
 #include "hub.hpp"
 #include "basic_hub_interface.hpp"
 
-namespace bunsan
+namespace bunsan{namespace dcs
 {
 	class hub_interface: private boost::noncopyable
 	{
@@ -16,9 +16,9 @@ namespace bunsan
 		~hub_interface();
 		void serve();
 	private:
-		std::unique_ptr<bunsan::basic_hub_interface> pimpl;
+		std::unique_ptr<bunsan::dcs::basic_hub_interface> pimpl;
 	};
-}
+}}
 
 #endif //HUB_INTERFACE_HPP
 

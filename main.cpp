@@ -42,10 +42,10 @@ int main(int argc, char **argv)
 		//end parse
 		//hub object
 		DLOG(creating hub);
-		bunsan::hub_ptr hub(new bunsan::hub(config.get_child("hub")));
+		bunsan::dcs::hub_ptr hub(new bunsan::dcs::hub(config.get_child("hub")));
 		//local user interface object
 		DLOG(creating hub interface);
-		std::shared_ptr<bunsan::hub_interface> iface(new bunsan::hub_interface(config.get_child("interface"), hub));
+		std::shared_ptr<bunsan::dcs::hub_interface> iface(new bunsan::dcs::hub_interface(config.get_child("interface"), hub));
 		//start interface in current thread
 		DLOG(starting infinite serve);
 		iface->serve();// will not return

@@ -13,11 +13,11 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
-#include "bunsan.hpp"
+#include "util.hpp"
 
 #include "basic_hub.hpp"
 
-namespace bunsan
+namespace bunsan{namespace dcs
 {
 	template <typename I>
 	std::string get_integer(const I &integer_)
@@ -125,10 +125,10 @@ namespace bunsan
 	private:
 		void set_capacity_(const std::string &type, const std::string &uri, const std::string &capacity);
 		void add_resource_(const std::string &type, const std::string &uri, const std::string &capacity);
-		std::unique_ptr<bunsan::basic_hub> pimpl;
+		std::unique_ptr<bunsan::dcs::basic_hub> pimpl;
 	};
 	typedef std::shared_ptr<hub> hub_ptr;
-}
+}}
 
 #endif //HUB_HPP
 

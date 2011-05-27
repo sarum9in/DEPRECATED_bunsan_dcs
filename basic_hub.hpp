@@ -3,9 +3,9 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-#include "bunsan.hpp"
+#include "util.hpp"
 
-namespace bunsan
+namespace bunsan{namespace dcs
 {
 	class basic_hub
 	{
@@ -19,7 +19,7 @@ namespace bunsan
 		virtual ~basic_hub()=0;
 	};
 	inline basic_hub::~basic_hub(){};
-}
+}}
 
 #endif //BASE_HUB_HPP
 

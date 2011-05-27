@@ -4,28 +4,26 @@
 
 #include <boost/lexical_cast.hpp>
 
-#include "bunsan.hpp"
-
 typedef std::unique_lock<std::mutex> guard;
 
-bunsan::hubs::local::local(const boost::property_tree::ptree &config)
+bunsan::dcs::hubs::local::local(const boost::property_tree::ptree &config)
 {
 	//TODO
 }
 
-void bunsan::hubs::local::clear()
+void bunsan::dcs::hubs::local::clear()
 {
 	DLOG(clearing hub info);
 	index_type_uri.clear();
 	index_type_capacity_uri.clear();
 }
 
-bunsan::hubs::local::~local()
+bunsan::dcs::hubs::local::~local()
 {
 	DLOG(destruction);
 }
 
-void bunsan::hubs::local::add_resource(const std::string &type, const std::string &uri, const std::string &capacity)
+void bunsan::dcs::hubs::local::add_resource(const std::string &type, const std::string &uri, const std::string &capacity)
 {
 	guard lk(lock);
 	SLOG(type<<' '<<uri<<' '<<capacity);
@@ -36,7 +34,7 @@ void bunsan::hubs::local::add_resource(const std::string &type, const std::strin
 	resource_ptr nr(new resource);
 	nr->type = type;
 	nr->uri = uri;
-	nr->capacity = boost::lexical_cast<bunsan::hubs::local::capacity_t>(capacity);
+	nr->capacity = boost::lexical_cast<bunsan::dcs::hubs::local::capacity_t>(capacity);
 	DLOG(created);
 	DLOG(adding object to index);
 	index_type_uri[nr->type][nr->uri] = nr;
@@ -44,14 +42,14 @@ void bunsan::hubs::local::add_resource(const std::string &type, const std::strin
 	DLOG(added);
 }
 
-void bunsan::hubs::local::remove_resource(const std::string &type, const std::string &uri)
+void bunsan::dcs::hubs::local::remove_resource(const std::string &type, const std::string &uri)
 {
 	guard lk(lock);
 	SLOG(type<<' '<<uri);
 	index_type_uri.at(type).erase(uri);
 }
 
-std::string bunsan::hubs::local::get_resource(const std::string &type)
+std::string bunsan::dcs::hubs::local::get_resource(const std::string &type)
 {
 	guard lk(lock);
 	SLOG(type);
@@ -75,11 +73,11 @@ std::string bunsan::hubs::local::get_resource(const std::string &type)
 	throw std::out_of_range("resource \""+type+"\" was not found");
 }
 
-void bunsan::hubs::local::set_capacity(const std::string &type, const std::string &uri, const std::string &capacity)
+void bunsan::dcs::hubs::local::set_capacity(const std::string &type, const std::string &uri, const std::string &capacity)
 {
 	guard lk(lock);
 	SLOG(type<<' '<<uri<<' '<<capacity);
-	bunsan::hubs::local::capacity_t nc = boost::lexical_cast<bunsan::hubs::local::capacity_t>(capacity);
+	bunsan::dcs::hubs::local::capacity_t nc = boost::lexical_cast<bunsan::dcs::hubs::local::capacity_t>(capacity);
 	if (!contains(type, uri))
 		throw std::out_of_range("resource \""+type+"\" with uri=\""+uri+"\" was not found");
 	index_type_capacity_uri[type][index_type_uri[type][uri]->capacity].erase(uri);
@@ -87,7 +85,7 @@ void bunsan::hubs::local::set_capacity(const std::string &type, const std::strin
 	index_type_capacity_uri[type][nc][uri] = resource_wptr(index_type_uri[type][uri]);
 }
 
-bool bunsan::hubs::local::contains(const std::string &type, const std::string &uri)
+bool bunsan::dcs::hubs::local::contains(const std::string &type, const std::string &uri)
 {
 	auto type_iter = index_type_uri.find(type);
 	if (type_iter==index_type_uri.end())

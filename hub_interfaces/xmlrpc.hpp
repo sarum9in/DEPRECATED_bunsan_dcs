@@ -8,9 +8,9 @@
 
 #include "basic_hub_interface.hpp"
 
-namespace bunsan{namespace hub_interfaces
+namespace bunsan{namespace dcs{namespace hub_interfaces
 {
-	class xmlrpc: public bunsan::basic_hub_interface
+	class xmlrpc: public bunsan::dcs::basic_hub_interface
 	{
 		typedef xmlrpc_c::registryPtr registry_ptr;
 		typedef std::unique_ptr<xmlrpc_c::serverAbyss> server_abyss_ptr;
@@ -22,5 +22,5 @@ namespace bunsan{namespace hub_interfaces
 		registry_ptr registry;
 		server_abyss_ptr server;
 	};
-}}
+}}}
 

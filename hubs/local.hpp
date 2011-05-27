@@ -10,9 +10,9 @@
 
 #include "basic_hub.hpp"
 
-namespace bunsan{namespace hubs
+namespace bunsan{namespace dcs{namespace hubs
 {
-	class local: public bunsan::basic_hub
+	class local: public bunsan::dcs::basic_hub
 	{
 		//typedef unsigned long long capacity_t; // 0 capacity as infinity and alinement with reducing capacity to negative
 		typedef long long capacity_t;
@@ -47,7 +47,7 @@ namespace bunsan{namespace hubs
 		std::map<std::string, std::map<std::string, resource_ptr>> index_type_uri;
 		std::map<std::string, std::map<capacity_t, std::map<std::string, resource_wptr>>> index_type_capacity_uri;
 	};
-}}
+}}}
 
 #endif //LOCAL_HPP
 

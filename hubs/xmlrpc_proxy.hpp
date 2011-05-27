@@ -5,9 +5,9 @@
 
 #include "basic_hub.hpp"
 
-namespace bunsan{namespace hubs
+namespace bunsan{namespace dcs{namespace hubs
 {
-	class xmlrpc_proxy: public basic_hub
+	class xmlrpc_proxy: public bunsan::dcs::basic_hub
 	{
 	public:
 		// non-copyable
@@ -29,7 +29,7 @@ namespace bunsan{namespace hubs
 	private:
 		const std::string server_url;
 	};
-}}
+}}}
 
 #endif //XMLRPC_PROXY_HPP
 
