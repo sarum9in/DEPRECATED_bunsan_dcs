@@ -32,18 +32,18 @@ namespace bunsan{namespace dcs
 		}
 		else
 		{
-			auto i = integer.begin();
+			auto i = integer.cbegin();
 			bool has_sign = integer[0]=='+' || integer[0]=='-';
 			if (has_sign)
 				++i;
-			if (i==integer.end())
+			if (i==integer.cend())
 			{
 				reason = "only sign";
 				bad = true;
 			}
 			else
 			{
-				if (!all_of(i, integer.end(), boost::algorithm::is_digit()))
+				if (!all_of(i, integer.cend(), boost::algorithm::is_digit()))
 				{
 					bad = true;
 					reason = "non-digit char";
