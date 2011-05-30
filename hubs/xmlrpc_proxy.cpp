@@ -64,7 +64,12 @@ bunsan::dcs::hubs::xmlrpc_proxy::~xmlrpc_proxy()
 #warning not defined
 void bunsan::dcs::hubs::xmlrpc_proxy::start(){}
 
-void bunsan::dcs::hubs::xmlrpc_proxy::wait(){}
+void bunsan::dcs::hubs::xmlrpc_proxy::join(){}
 
 void bunsan::dcs::hubs::xmlrpc_proxy::stop(){}
 
+bool bunsan::dcs::hubs::xmlrpc_proxy::is_running()
+{
+#warning not defined
+	return true;
+}

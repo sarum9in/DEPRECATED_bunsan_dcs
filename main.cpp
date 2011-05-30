@@ -3,8 +3,7 @@
 
 #include <boost/program_options.hpp>
 #include <boost/property_tree/ptree.hpp>
-//#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/xml_parser.hpp>
+#include <boost/property_tree/info_parser.hpp>
 
 #include "util.hpp"
 #include "hub.hpp"
@@ -39,19 +38,24 @@ int main(int argc, char **argv)
 		//config parse
 		DLOG(config parse);
 		boost::property_tree::ptree config;
-		boost::property_tree::xml_parser::read_xml(config_file, config);
+		boost::property_tree::info_parser::read_info(config_file, config);
 		//end parse
 		//hub object
 		DLOG(creating hub);
 		bunsan::dcs::hub_ptr hub = bunsan::dcs::hub::instance(config.get<std::string>("hub.type"), config.get_child("hub.config"));
+		if (!hub)
+			throw std::runtime_error("hub was not created");
+		hub->start();
 		//local user interface object
 		DLOG(creating hub interface);
 		bunsan::dcs::hub_interface_ptr iface = bunsan::dcs::hub_interface::instance(config.get<std::string>("interface.type"), config.get_child("interface.config"), hub);
+		if (!iface)
+			throw std::runtime_error("hub interface was not created");
 		//start interface in current thread
 		DLOG(starting infinite serve);
 		iface->start();
 		DLOG(waiting: should not return);
-		iface->wait();// will not return
+		iface->join();// should not return
 	}
 	catch(std::exception &e)
 	{

@@ -34,8 +34,9 @@ namespace bunsan{namespace dcs{namespace hubs
 		virtual void remove_resource(const std::string &type, const std::string &uri);
 		virtual std::string get_resource(const std::string &type);
 		virtual void start();
-		virtual void wait();
+		virtual void join();
 		virtual void stop();
+		virtual bool is_running();
 		virtual ~local();
 	protected:
 		virtual void add_resource_(const std::string &type, const std::string &uri, const std::string &capacity);

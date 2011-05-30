@@ -146,6 +146,10 @@ private:
 	bunsan::dcs::hub_ptr hub_;
 };
 
+void bunsan::dcs::hub_interfaces::xmlrpc::create_server()
+{
+	server.reset(new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryPtr(registry).portNumber(port)));
+}
 
 bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__), registry(new xmlrpc_c::registry)
 {
@@ -160,29 +164,53 @@ bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &c
 	registry->addMethod("remove_resource", remove_resource);
 	registry->addMethod("set_capacity", set_capacity);
 	registry->addMethod("get_resource", get_resource);
-	server.reset(new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryPtr(registry).portNumber(config.get<unsigned int>("server.port"))));
+	port = config.get<unsigned int>("server.port");
+}
+
+bunsan::dcs::hub_ptr bunsan::dcs::hub_interfaces::xmlrpc::hub()
+{
+	return hub_;
+}
+
+void bunsan::dcs::hub_interfaces::xmlrpc::run()
+{
+	server_ptr server_;
+	{
+		guard lk(lock);
+		create_server();
+		server_ = server;
+	}
+	server_->run();
+	{
+		guard lk(lock);
+		server.reset();
+	}
 }
 
 void bunsan::dcs::hub_interfaces::xmlrpc::start()
 {
-#warning error check
-	if (server)
-		thread.reset(new std::thread(&xmlrpc_c::serverAbyss::run, &(*server)));
+	guard lk(lock);
+	if (!server)
+	{
+		thread = std::thread(&bunsan::dcs::hub_interfaces::xmlrpc::run, this);
+	}
 }
 
-void bunsan::dcs::hub_interfaces::xmlrpc::wait()
+void bunsan::dcs::hub_interfaces::xmlrpc::join()
 {
-#warning error check
-	if (thread)
-		thread->join();
+	thread.join();
 }
 
 void bunsan::dcs::hub_interfaces::xmlrpc::stop()
 {
-#warning error check
+	guard lk(lock);
 	if (server)
 		server->terminate();
-	if (thread)
-		thread->join();
+}
+
+bool bunsan::dcs::hub_interfaces::xmlrpc::is_running()
+{
+	guard lk(lock);
+	return static_cast<bool>(server);
 }
 

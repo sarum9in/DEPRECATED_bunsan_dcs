@@ -19,11 +19,17 @@ bunsan::dcs::hub_interface_ptr bunsan::dcs::hub_interface::instance(const std::s
 	{
 		auto iter = factory->find(type);
 		if (iter==factory->end())
+		{
 			return bunsan::dcs::hub_interface_ptr();
+		}
 		else
+		{
 			return iter->second(config, hub__);
+		}
 	}
 	else
+	{
 		return bunsan::dcs::hub_interface_ptr();
+	}
 }
 

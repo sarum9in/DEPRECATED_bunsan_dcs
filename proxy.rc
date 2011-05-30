@@ -1,16 +1,21 @@
 
-<hub>
-	<type>xmlrpc_proxy</type>
-	<config>
-		<server_url>http://localhost:1924/RPC2</server_url>
-	</config>
-</hub>
-<interface>
-	<type>xmlrpc</type>
-	<config>
-		<server>
-			<port>1925</port>
-		</server>
-	</config>
-</interface>
+hub
+{
+	type xmlrpc_proxy
+	config
+	{
+		server_url http://localhost:1924/RPC2
+	}
+}
 
+interface
+{
+	type xmlrpc
+	config
+	{
+		server
+		{
+			port 1925
+		}
+	}
+}

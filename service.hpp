@@ -6,9 +6,23 @@ namespace bunsan{namespace dcs
 	class service
 	{
 	public:
+		/*!
+		 * \brief start service
+		 * non-blocking call, thread will run in different thread
+		 */
 		virtual void start()=0;
-		virtual void wait()=0;
+		/*!
+		 * \brief join service thread
+		 */
+		virtual void join()=0;
+		/*!
+		 * \brief stop service
+		 */
 		virtual void stop()=0;
+		/*!
+		 * \return wether service is running
+		 */
+		virtual bool is_running()=0;
 	};
 }}
 

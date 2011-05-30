@@ -1,22 +1,26 @@
 
-<hub>
-	<type>local</type>
-	<config>
-	</config>
-	<!--
-	<type>lan</type>
-	<config>
-		<port>3212</port>
-		<node>server</node>
-	</config>
-	-->
-</hub>
-<interface>
-	<type>xmlrpc</type>
-	<config>
-		<server>
-			<port>1924</port>
-		</server>
-	</config>
-</interface>
+hub
+{
+	type local
+	config
+	{
+	}
+	;type lan
+	;config
+	;{
+	;	port 3212
+	;	node server
+	;}
+}
+interface
+{
+	type xmlrpc
+	config
+	{
+		server
+		{
+			port 1924
+		}
+	}
+}
 

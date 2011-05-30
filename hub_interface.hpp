@@ -12,6 +12,7 @@ namespace bunsan{namespace dcs
 	class hub_interface: public service, private boost::noncopyable
 	{
 	public:
+		virtual bunsan::dcs::hub_ptr hub()=0;
 		// factory
 		typedef std::shared_ptr<hub_interface> hub_interface_ptr;
 		static hub_interface_ptr instance(const std::string &type, const boost::property_tree::ptree &config, bunsan::dcs::hub_ptr hub__);

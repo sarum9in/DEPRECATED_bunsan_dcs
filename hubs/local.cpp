@@ -20,7 +20,7 @@ typedef std::unique_lock<std::mutex> guard;
 
 bunsan::dcs::hubs::local::local(const boost::property_tree::ptree &config)
 {
-	//TODO
+#warning empty constructor
 }
 
 void bunsan::dcs::hubs::local::clear()
@@ -38,9 +38,15 @@ bunsan::dcs::hubs::local::~local()
 #warning not defined
 void bunsan::dcs::hubs::local::start(){}
 
-void bunsan::dcs::hubs::local::wait(){}
+void bunsan::dcs::hubs::local::join(){}
 
 void bunsan::dcs::hubs::local::stop(){}
+
+bool bunsan::dcs::hubs::local::is_running()
+{
+#warning not defined
+	return true;
+}
 
 void bunsan::dcs::hubs::local::add_resource_(const std::string &type, const std::string &uri, const std::string &capacity)
 {
