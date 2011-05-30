@@ -4,6 +4,18 @@
 
 #include "util.hpp"
 
+// factory
+
+bunsan::runner bunsan::dcs::hubs::xmlrpc_proxy::reg(bunsan::dcs::hub::register_new, "xmlrpc_proxy", bunsan::dcs::hubs::xmlrpc_proxy::instance);
+
+bunsan::dcs::hub_ptr bunsan::dcs::hubs::xmlrpc_proxy::instance(const boost::property_tree::ptree &config)
+{
+	hub_ptr tmp(new xmlrpc_proxy(config));
+	return tmp;
+}
+
+// virtual class
+
 bunsan::dcs::hubs::xmlrpc_proxy::xmlrpc_proxy(const boost::property_tree::ptree &config):server_url(config.get<std::string>("server_url"))
 {
 	SLOG("created proxy for bunsan::dcs::hub_interface::xmlrpc with address \""<<server_url<<"\"");
@@ -16,7 +28,7 @@ void bunsan::dcs::hubs::xmlrpc_proxy::clear()
 	proxy.call(server_url, "clear", xmlrpc_c::paramList(), &result);
 }
 
-void bunsan::dcs::hubs::xmlrpc_proxy::add_resource(const std::string &type, const std::string &uri, const std::string &capacity)
+void bunsan::dcs::hubs::xmlrpc_proxy::add_resource_(const std::string &type, const std::string &uri, const std::string &capacity)
 {
 	xmlrpc_c::clientSimple proxy;
 	xmlrpc_c::value result;
@@ -30,7 +42,7 @@ void bunsan::dcs::hubs::xmlrpc_proxy::remove_resource(const std::string &type, c
 	proxy.call(server_url, "remove_resource", xmlrpc_c::paramList().addc(type).addc(uri), &result);
 }
 
-void bunsan::dcs::hubs::xmlrpc_proxy::set_capacity(const std::string &type, const std::string &uri, const std::string &capacity)
+void bunsan::dcs::hubs::xmlrpc_proxy::set_capacity_(const std::string &type, const std::string &uri, const std::string &capacity)
 {
 	xmlrpc_c::clientSimple proxy;
 	xmlrpc_c::value result;
@@ -48,4 +60,11 @@ std::string bunsan::dcs::hubs::xmlrpc_proxy::get_resource(const std::string &typ
 bunsan::dcs::hubs::xmlrpc_proxy::~xmlrpc_proxy()
 {
 }
+
+#warning not defined
+void bunsan::dcs::hubs::xmlrpc_proxy::start(){}
+
+void bunsan::dcs::hubs::xmlrpc_proxy::wait(){}
+
+void bunsan::dcs::hubs::xmlrpc_proxy::stop(){}
 

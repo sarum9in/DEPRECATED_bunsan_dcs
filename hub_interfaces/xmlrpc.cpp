@@ -11,6 +11,18 @@
 
 #include "util.hpp"
 
+// factory
+
+bunsan::runner bunsan::dcs::hub_interfaces::xmlrpc::reg(bunsan::dcs::hub_interface::register_new, "xmlrpc", bunsan::dcs::hub_interfaces::xmlrpc::instance);
+
+bunsan::dcs::hub_interface_ptr bunsan::dcs::hub_interfaces::xmlrpc::instance(const boost::property_tree::ptree &config, hub_ptr hub__)
+{
+	hub_interface_ptr tmp(new xmlrpc(config, hub__));
+	return tmp;
+}
+
+// virtual class
+
 class method_clear: public xmlrpc_c::method2
 {
 public:
@@ -151,8 +163,26 @@ bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &c
 	server.reset(new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryPtr(registry).portNumber(config.get<unsigned int>("server.port"))));
 }
 
-void bunsan::dcs::hub_interfaces::xmlrpc::serve()
+void bunsan::dcs::hub_interfaces::xmlrpc::start()
 {
-	server->run();
+#warning error check
+	if (server)
+		thread.reset(new std::thread(&xmlrpc_c::serverAbyss::run, &(*server)));
+}
+
+void bunsan::dcs::hub_interfaces::xmlrpc::wait()
+{
+#warning error check
+	if (thread)
+		thread->join();
+}
+
+void bunsan::dcs::hub_interfaces::xmlrpc::stop()
+{
+#warning error check
+	if (server)
+		server->terminate();
+	if (thread)
+		thread->join();
 }
 

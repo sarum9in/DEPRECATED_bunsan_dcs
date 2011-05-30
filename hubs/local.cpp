@@ -4,6 +4,18 @@
 
 #include <boost/lexical_cast.hpp>
 
+// factory
+
+bunsan::runner bunsan::dcs::hubs::local::reg(bunsan::dcs::hub::register_new, "local", bunsan::dcs::hubs::local::instance);
+
+bunsan::dcs::hub_ptr bunsan::dcs::hubs::local::instance(const boost::property_tree::ptree &config)
+{
+	hub_ptr tmp(new local(config));
+	return tmp;
+}
+
+// virtual class
+
 typedef std::unique_lock<std::mutex> guard;
 
 bunsan::dcs::hubs::local::local(const boost::property_tree::ptree &config)
@@ -23,7 +35,14 @@ bunsan::dcs::hubs::local::~local()
 	DLOG(destruction);
 }
 
-void bunsan::dcs::hubs::local::add_resource(const std::string &type, const std::string &uri, const std::string &capacity)
+#warning not defined
+void bunsan::dcs::hubs::local::start(){}
+
+void bunsan::dcs::hubs::local::wait(){}
+
+void bunsan::dcs::hubs::local::stop(){}
+
+void bunsan::dcs::hubs::local::add_resource_(const std::string &type, const std::string &uri, const std::string &capacity)
 {
 	guard lk(lock);
 	SLOG(type<<' '<<uri<<' '<<capacity);
@@ -73,7 +92,7 @@ std::string bunsan::dcs::hubs::local::get_resource(const std::string &type)
 	throw std::out_of_range("resource \""+type+"\" was not found");
 }
 
-void bunsan::dcs::hubs::local::set_capacity(const std::string &type, const std::string &uri, const std::string &capacity)
+void bunsan::dcs::hubs::local::set_capacity_(const std::string &type, const std::string &uri, const std::string &capacity)
 {
 	guard lk(lock);
 	SLOG(type<<' '<<uri<<' '<<capacity);

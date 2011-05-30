@@ -6,6 +6,7 @@
 //#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
+#include "util.hpp"
 #include "hub.hpp"
 #include "hub_interface.hpp"
 
@@ -42,13 +43,15 @@ int main(int argc, char **argv)
 		//end parse
 		//hub object
 		DLOG(creating hub);
-		bunsan::dcs::hub_ptr hub(new bunsan::dcs::hub(config.get_child("hub")));
+		bunsan::dcs::hub_ptr hub = bunsan::dcs::hub::instance(config.get<std::string>("hub.type"), config.get_child("hub.config"));
 		//local user interface object
 		DLOG(creating hub interface);
-		std::shared_ptr<bunsan::dcs::hub_interface> iface(new bunsan::dcs::hub_interface(config.get_child("interface"), hub));
+		bunsan::dcs::hub_interface_ptr iface = bunsan::dcs::hub_interface::instance(config.get<std::string>("interface.type"), config.get_child("interface.config"), hub);
 		//start interface in current thread
 		DLOG(starting infinite serve);
-		iface->serve();// will not return
+		iface->start();
+		DLOG(waiting: should not return);
+		iface->wait();// will not return
 	}
 	catch(std::exception &e)
 	{

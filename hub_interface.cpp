@@ -1,29 +1,29 @@
 #include "hub_interface.hpp"
 
-#include <string>
-#include <stdexcept>
+// factory
+std::shared_ptr<std::map<std::string, std::function<bunsan::dcs::hub_interface_ptr(const boost::property_tree::ptree &, bunsan::dcs::hub_ptr)>>> bunsan::dcs::hub_interface::factory;
 
-#include "hub_interfaces/xmlrpc.hpp"
-
-bunsan::dcs::hub_interface::hub_interface(const boost::property_tree::ptree &config, hub_ptr hub_)
+void bunsan::dcs::hub_interface::register_new(const std::string &type, const std::function<hub_interface_ptr(const boost::property_tree::ptree &, bunsan::dcs::hub_ptr)> f)
 {
-	std::string type = config.get<std::string>("type");
-	if (type=="xmlrpc")
+	if (!factory)
+		factory.reset(new std::map<std::string, std::function<hub_interface_ptr(const boost::property_tree::ptree &, bunsan::dcs::hub_ptr)>>);
+	if (factory->find(type)==factory->end())
+		(*factory)[type] = f;
+	else
+		throw std::runtime_error("factory \""+type+"\" was already registered");
+}
+
+bunsan::dcs::hub_interface_ptr bunsan::dcs::hub_interface::instance(const std::string &type, const boost::property_tree::ptree &config, bunsan::dcs::hub_ptr hub__)
+{
+	if (factory)
 	{
-		pimpl.reset(new bunsan::dcs::hub_interfaces::xmlrpc(config.get_child("config"), hub_));
+		auto iter = factory->find(type);
+		if (iter==factory->end())
+			return bunsan::dcs::hub_interface_ptr();
+		else
+			return iter->second(config, hub__);
 	}
 	else
-	{
-		throw std::out_of_range("\""+type+"\" was not implemented");
-	}
-}
-
-bunsan::dcs::hub_interface::~hub_interface()
-{
-}
-
-void bunsan::dcs::hub_interface::serve()
-{
-	pimpl->serve();
+		return bunsan::dcs::hub_interface_ptr();
 }
 
