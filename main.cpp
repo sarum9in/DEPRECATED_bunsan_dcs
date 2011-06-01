@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 		//config parse
 		DLOG(config parse);
 		boost::property_tree::ptree config;
-		boost::property_tree::info_parser::read_info(config_file, config);
+		bunsan::read_info(config_file, config);
 		//end parse
 		//hub object
 		DLOG(creating hub);

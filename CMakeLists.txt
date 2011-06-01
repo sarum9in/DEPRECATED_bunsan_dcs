@@ -41,6 +41,16 @@ aux_source_directory(. srcs)
 aux_source_directory(hubs hubs_srcs)
 aux_source_directory(hub_interfaces hub_interfaces_srcs)
 
-add_executable(${PROJECT_NAME} ${srcs} ${hubs_srcs} ${hub_interfaces_srcs})
+foreach(src ${srcs})
+	if (NOT ${src} MATCHES "main.cpp$")
+		set(lib_srcs ${lib_srcs} ${src})
+		#message("${src}")
+	endif()
+endforeach()
+
+add_library(${PROJECT_NAME} STATIC ${lib_srcs} ${hubs_srcs} ${hub_interfaces_srcs})
 target_link_libraries(${PROJECT_NAME} bunsan_common ${Boost_LIBRARIES} ${xmlrpc_link_lib})
+
+add_executable(dcs main.cpp)
+target_link_libraries(dcs ${PROJECT_NAME})
 
