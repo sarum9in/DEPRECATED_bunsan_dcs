@@ -11,12 +11,13 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "hub_container.hpp"
 #include "service.hpp"
+
+#include "hub_container.hpp"
 
 namespace bunsan{namespace dcs
 {
-	class hub: public hub_container, public service, private boost::noncopyable
+	class hub: public hub_container, public bunsan::service, private boost::noncopyable
 	{
 	public:
 		// factory

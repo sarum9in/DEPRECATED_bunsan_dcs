@@ -4,12 +4,13 @@
 #include <boost/noncopyable.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-#include "hub.hpp"
 #include "service.hpp"
+
+#include "hub.hpp"
 
 namespace bunsan{namespace dcs
 {
-	class hub_interface: public service, private boost::noncopyable
+	class hub_interface: public bunsan::service, private boost::noncopyable
 	{
 	public:
 		virtual bunsan::dcs::hub_ptr hub()=0;

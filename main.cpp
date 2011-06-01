@@ -15,7 +15,6 @@ int main(int argc, char **argv)
 	try
 	{
 		//command line parse
-		//boost::program_options::options_description desc("Bunsan");
 		boost::program_options::options_description desc(argv[0]);
 		desc.add_options()
 			("help,h", "Print this information")

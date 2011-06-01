@@ -1,4 +1,4 @@
-project(dcs)
+project(bunsan_dcs)
 
 cmake_minimum_required(VERSION 2.8)
 
