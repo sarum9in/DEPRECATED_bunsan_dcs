@@ -10,7 +10,7 @@
 
 namespace bunsan{namespace dcs
 {
-	class hub_interface: public bunsan::service, private boost::noncopyable
+	class hub_interface: virtual public bunsan::service, private boost::noncopyable
 	{
 	public:
 		virtual bunsan::dcs::hub_ptr hub()=0;

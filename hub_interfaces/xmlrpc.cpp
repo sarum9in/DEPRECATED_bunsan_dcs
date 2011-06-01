@@ -151,8 +151,9 @@ void bunsan::dcs::hub_interfaces::xmlrpc::create_server()
 	server.reset(new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryPtr(registry).portNumber(port)));
 }
 
-bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__), registry(new xmlrpc_c::registry)
+bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__)
 {
+	registry = new xmlrpc_c::registry;
 	xmlrpc_c::methodPtr
 		clear(new method_clear(hub_)),
 		add_resource(new method_add_resource(hub_)),
@@ -170,47 +171,5 @@ bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &c
 bunsan::dcs::hub_ptr bunsan::dcs::hub_interfaces::xmlrpc::hub()
 {
 	return hub_;
-}
-
-void bunsan::dcs::hub_interfaces::xmlrpc::run()
-{
-	server_ptr server_;
-	{
-		guard lk(lock);
-		create_server();
-		server_ = server;
-	}
-	server_->run();
-	{
-		guard lk(lock);
-		server.reset();
-	}
-}
-
-void bunsan::dcs::hub_interfaces::xmlrpc::start()
-{
-	guard lk(lock);
-	if (!server)
-	{
-		thread = std::thread(&bunsan::dcs::hub_interfaces::xmlrpc::run, this);
-	}
-}
-
-void bunsan::dcs::hub_interfaces::xmlrpc::join()
-{
-	thread.join();
-}
-
-void bunsan::dcs::hub_interfaces::xmlrpc::stop()
-{
-	guard lk(lock);
-	if (server)
-		server->terminate();
-}
-
-bool bunsan::dcs::hub_interfaces::xmlrpc::is_running()
-{
-	guard lk(lock);
-	return static_cast<bool>(server);
 }
 

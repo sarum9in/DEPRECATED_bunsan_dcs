@@ -8,7 +8,7 @@
 
 namespace bunsan{namespace dcs{namespace hubs
 {
-	class xmlrpc_proxy: public bunsan::dcs::hub
+	class xmlrpc_proxy: virtual public bunsan::dcs::hub
 	{
 	public:
 		// construction

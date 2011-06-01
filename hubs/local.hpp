@@ -14,7 +14,7 @@
 
 namespace bunsan{namespace dcs{namespace hubs
 {
-	class local: public bunsan::dcs::hub
+	class local: virtual public bunsan::dcs::hub
 	{
 		//typedef unsigned long long capacity_t; // 0 capacity as infinity and alinement with reducing capacity to negative
 		typedef long long capacity_t;

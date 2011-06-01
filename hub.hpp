@@ -17,7 +17,7 @@
 
 namespace bunsan{namespace dcs
 {
-	class hub: public hub_container, public bunsan::service, private boost::noncopyable
+	class hub: virtual public hub_container, virtual public bunsan::service, private boost::noncopyable
 	{
 	public:
 		// factory
