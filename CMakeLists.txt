@@ -33,7 +33,7 @@ message("We have to check pthread library on win* platform")
 
 add_definitions(-std=c++0x -pthread -g)
 
-add_subdirectory(${BUNSAN_COMMON_DIR} ${PROJECT_BINARY_DIR}/common)
+add_subdirectory(${BUNSAN_COMMON_DIR} ${PROJECT_BINARY_DIR}/common EXCLUDE_FROM_ALL)
 
 include_directories(. ${BUNSAN_COMMON_DIR})
 
@@ -53,4 +53,13 @@ target_link_libraries(${PROJECT_NAME} bunsan_common ${Boost_LIBRARIES} ${xmlrpc_
 
 add_executable(dcs main.cpp)
 target_link_libraries(dcs ${PROJECT_NAME})
+
+# install
+
+file(GLOB headers . "*.hpp")
+install(FILES ${headers} DESTINATION include/bunsan/dcs)
+
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+
+install(TARGETS dcs DESTINATION bin)
 
