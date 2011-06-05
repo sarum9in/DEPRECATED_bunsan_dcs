@@ -33,7 +33,9 @@ message("We have to check pthread library on win* platform")
 
 add_definitions(-std=c++0x -pthread -g)
 
-add_subdirectory(${BUNSAN_COMMON_DIR} ${PROJECT_BINARY_DIR}/common EXCLUDE_FROM_ALL)
+if (NOT TARGET bunsan_common)
+	add_subdirectory(${BUNSAN_COMMON_DIR} ${PROJECT_BINARY_DIR}/common EXCLUDE_FROM_ALL)
+endif()
 
 include_directories(. ${BUNSAN_COMMON_DIR})
 
