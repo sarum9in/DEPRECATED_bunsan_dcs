@@ -13,7 +13,7 @@ void bunsan::dcs::hub_interface::register_new(const std::string &type, const std
 		throw std::runtime_error("factory \""+type+"\" was already registered");
 }
 
-bunsan::dcs::hub_interface_ptr bunsan::dcs::hub_interface::instance(const std::string &type, const boost::property_tree::ptree &config, bunsan::dcs::hub_ptr hub__)
+bunsan::dcs::hub_interface_ptr bunsan::dcs::hub_interface::instance(const std::string &type, const boost::property_tree::ptree &config, bunsan::dcs::hub_ptr hub_)
 {
 	if (factory)
 	{
@@ -24,7 +24,7 @@ bunsan::dcs::hub_interface_ptr bunsan::dcs::hub_interface::instance(const std::s
 		}
 		else
 		{
-			return iter->second(config, hub__);
+			return iter->second(config, hub_);
 		}
 	}
 	else
