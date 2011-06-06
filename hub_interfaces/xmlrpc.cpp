@@ -151,9 +151,8 @@ void bunsan::dcs::hub_interfaces::xmlrpc::create_server()
 	server.reset(new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryPtr(registry).portNumber(port)));
 }
 
-bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__)
+bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__), port(config.get<unsigned int>("server.port")), registry(new xmlrpc_c::registry)
 {
-	registry = new xmlrpc_c::registry;
 	xmlrpc_c::methodPtr
 		clear(new method_clear(hub_)),
 		add_resource(new method_add_resource(hub_)),
@@ -165,7 +164,6 @@ bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &c
 	registry->addMethod("remove_resource", remove_resource);
 	registry->addMethod("set_capacity", set_capacity);
 	registry->addMethod("get_resource", get_resource);
-	port = config.get<unsigned int>("server.port");
 }
 
 bunsan::dcs::hub_ptr bunsan::dcs::hub_interfaces::xmlrpc::hub()
