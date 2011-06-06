@@ -23,12 +23,14 @@ namespace bunsan{namespace dcs{namespace hub_interfaces
 		xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__);
 		virtual bunsan::dcs::hub_ptr hub();
 	protected:
-		static hub_interface_ptr instance(const boost::property_tree::ptree &config, hub_ptr hub__);
 		virtual void create_server();
+		// factory
+		static hub_interface_ptr instance(const boost::property_tree::ptree &config, hub_ptr hub__);
 	private:
 		typedef std::unique_lock<std::mutex> guard;
 		std::mutex lock;
 		unsigned port;
+		registry_ptr registry;
 		hub_ptr hub_;
 		// factory
 		static bunsan::runner reg;
