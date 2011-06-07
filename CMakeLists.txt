@@ -19,7 +19,7 @@ set(
 )
 
 # BOOST
-set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 find_package(Boost COMPONENTS system filesystem serialization iostreams unit_test_framework program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -50,7 +50,7 @@ foreach(src ${srcs})
 	endif()
 endforeach()
 
-add_library(${PROJECT_NAME} STATIC ${lib_srcs} ${hubs_srcs} ${hub_interfaces_srcs})
+add_library(${PROJECT_NAME} SHARED ${lib_srcs} ${hubs_srcs} ${hub_interfaces_srcs})
 target_link_libraries(${PROJECT_NAME} bunsan_common ${Boost_LIBRARIES} ${xmlrpc_link_lib})
 
 add_executable(dcs main.cpp)
