@@ -65,3 +65,8 @@ install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 
 install(TARGETS dcs DESTINATION bin)
 
+# testing
+
+enable_testing()
+add_subdirectory(tests ${PROJECT_BINARY_DIR}/tests)
+
