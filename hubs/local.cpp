@@ -34,6 +34,8 @@ void bunsan::dcs::hubs::local::add_machine_(const std::string &machine, const st
 	capacity_t capacity_ = boost::lexical_cast<capacity_t>(capacity);
 	machine_ptr machine_(new machine_t);
 	machine_->capacity = capacity_;
+	if (machines.find(machine)!=machines.end())
+		throw std::out_of_range("machine \""+machine+"\" was already created");
 	machines[machine] = machine_;
 }
 

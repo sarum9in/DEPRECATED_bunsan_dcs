@@ -15,6 +15,12 @@ int main(int argc, char **argv)
 	hub_ptr local = hub::instance("local", config);
 	local->start();
 	local->add_machine("local0", 0);
+	try
+	{
+		local->add_machine("local0", 0);
+		assert(false);
+	}
+	catch (std::exception &e){}
 	local->add_resource("local0", "gcc", "gcc0_uri");
 	local->add_machine("local1", 0);
 	local->add_resource("local1", "gcc", "gcc1_uri");
