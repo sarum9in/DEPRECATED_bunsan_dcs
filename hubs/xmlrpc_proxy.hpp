@@ -3,32 +3,35 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-#include "runner.hpp"
+#include "pseudo_service.hpp"
 #include "hub.hpp"
 
 namespace bunsan{namespace dcs{namespace hubs
 {
-	class xmlrpc_proxy: virtual public bunsan::dcs::hub
+	class xmlrpc_proxy: virtual public bunsan::dcs::hub, virtual public bunsan::pseudo_service
 	{
 	public:
 		// construction
 		xmlrpc_proxy(const boost::property_tree::ptree &config);
 		// manipulation
+		// hub_container
+		// machine
+		virtual void remove_machine(const std::string &machine);
 		virtual void clear();
-		virtual void remove_resource(const std::string &type, const std::string &uri);
-		virtual std::string get_resource(const std::string &type);
-		virtual void start();
-		virtual void join();
-		virtual void stop();
-		virtual bool is_running();
+		// resource
+		virtual void add_resource(const std::string &machine, const std::string &resource, const std::string &uri);
+		virtual void set_resource_uri(const std::string &machine, const std::string &resource, const std::string &uri);
+		virtual void remove_resource(const std::string &machine, const std::string &resource);
+		// select
+		virtual std::string select_resource(const std::string &resource);
+		// service
 		virtual ~xmlrpc_proxy();
 	protected:
-		virtual void add_resource_(const std::string &type, const std::string &uri, const std::string &capacity);
-		virtual void set_capacity_(const std::string &type, const std::string &uri, const std::string &capacity);
-		static hub_ptr instance(const boost::property_tree::ptree &config);
+		virtual void add_machine_(const std::string &machine, const std::string &capacity);
+		virtual void set_capacity_(const std::string &machine, const std::string &capacity);
 	private:
 		const std::string server_url;
-		static bunsan::runner reg;
+		static bool factory_reg_hook;
 	};
 }}}
 

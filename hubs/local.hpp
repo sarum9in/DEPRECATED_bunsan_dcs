@@ -4,50 +4,57 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
+#include <functional>
 #include <mutex>
+#include <condition_variable>
 
 #include <boost/property_tree/ptree.hpp>
 
-#include "runner.hpp"
-
+#include "pseudo_service.hpp"
 #include "hub.hpp"
 
 namespace bunsan{namespace dcs{namespace hubs
 {
-	class local: virtual public bunsan::dcs::hub
+	class local: virtual public bunsan::dcs::hub, virtual public bunsan::pseudo_service
 	{
-		//typedef unsigned long long capacity_t; // 0 capacity as infinity and alinement with reducing capacity to negative
 		typedef long long capacity_t;
-		struct resource
+		struct machine_t
 		{
-			std::string type, uri;
+			std::string machine;
 			capacity_t capacity;
+			std::map<std::string, std::string> resource_uri;
 		};
-		typedef std::shared_ptr<resource> resource_ptr;
-		typedef std::weak_ptr<resource> resource_wptr;
+		typedef std::shared_ptr<machine_t> machine_ptr;
+		typedef std::weak_ptr<machine_t> machine_wptr;
 	public:
 		// construction
 		local(const boost::property_tree::ptree &config);
-		virtual void clear();
+		virtual ~local();
 		//virtual void reinit(const boost::property_tree::ptree &config);
 		// manipulation
-		virtual void remove_resource(const std::string &type, const std::string &uri);
-		virtual std::string get_resource(const std::string &type);
-		virtual void start();
-		virtual void join();
-		virtual void stop();
-		virtual bool is_running();
-		virtual ~local();
+		// hub_container
+		// machine
+		virtual void remove_machine(const std::string &machine);
+		virtual void clear();
+		// resource
+		virtual void add_resource(const std::string &machine, const std::string &resource, const std::string &uri);
+		virtual void set_resource_uri(const std::string &machine, const std::string &resource, const std::string &uri);
+		virtual void remove_resource(const std::string &machine, const std::string &resource);
+		// select
+		virtual std::string select_resource(const std::string &resource);
 	protected:
-		virtual void add_resource_(const std::string &type, const std::string &uri, const std::string &capacity);
-		virtual void set_capacity_(const std::string &type, const std::string &uri, const std::string &capacity);
-		static hub_ptr instance(const boost::property_tree::ptree &config);
+		virtual void add_machine_(const std::string &machine, const std::string &capacity);
+		virtual void set_capacity_(const std::string &machine, const std::string &capacity);
 	private:
-		bool contains(const std::string &type, const std::string &uri);
+		typedef std::unique_lock<std::mutex> guard;
 		std::mutex lock;
-		std::map<std::string, std::map<std::string, resource_ptr>> index_type_uri;
-		std::map<std::string, std::map<capacity_t, std::map<std::string, resource_wptr>>> index_type_capacity_uri;
-		static bunsan::runner reg;
+		bool running;
+		std::mutex run_lock;
+		std::condition_variable joiner;
+		std::map<std::string, machine_ptr> machines;
+		std::map<std::string, std::multimap<capacity_t, machine_wptr, std::greater<capacity_t>>> resources;
+		static bool factory_reg_hook;
 	};
 }}}
 

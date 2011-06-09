@@ -44,52 +44,59 @@ namespace bunsan{namespace dcs
 	{
 	public:
 		/*!
-		 * \brief adds new resource to hub
+		 * \brief add new machine
+		 * 
+		 * machine can be assumed as a resource group
 		 *
-		 * \param type resource type
-		 * \param uri resource uri
-		 * \param capacity resource capacity
+		 * \param machine machine name
+		 * \param capacity machine's capacity
 		 */
 		template <typename I>
-		void add_resource(const std::string &type, const std::string &uri, const I &capacity)
+		void add_machine(const std::string &machine, const I &capacity)
 		{
-			SLOG(type<<' '<<' '<<uri<<' '<<capacity);
-			this->add_resource_(type, uri, get_integer(capacity));
+			SLOG(machine<<' '<<capacity);
+			this->add_machine_(machine, get_integer(capacity));
 		}
 		/*!
-		 * \brief sets resource capacity
+		 * \brief set machine's capacity
 		 *
-		 * \brief type resource type
-		 * \param uri resource uri
-		 * \param capacity resource capacity
+		 * \param machine machine name
+		 * \param capacity machine's capacity
 		 */
 		template <typename I>
-		void set_capacity(const std::string &type, const std::string &uri, const I &capacity)
+		void set_capacity(const std::string &machine, const I &capacity)
 		{
-			SLOG(type<<' '<<' '<<uri<<' '<<capacity);
-			this->set_capacity_(type, uri, get_integer(capacity));
+			SLOG(machine<<' '<<capacity);
+			this->set_capacity_(machine, get_integer(capacity));
 		}
 		/*!
-		 * \brief removes resource from hub
-		 *
-		 * \param type resource type
-		 * \param uri resource uri
+		 * \brief remove machine and all resources it has
 		 */
-		virtual void remove_resource(const std::string &type, const std::string &uri)=0;
+		virtual void remove_machine(const std::string &machine)=0;
 		/*!
-		 * \brief returns some resource uri for specified type
-		 *
-		 * \param type resource type
+		 * \brief add resource to machine
 		 */
-		virtual std::string get_resource(const std::string &type)=0;
+		virtual void add_resource(const std::string &machine, const std::string &resource, const std::string &uri)=0;
 		/*!
-		 * \brief clears all info from hub
+		 * \brief set resource uri
+		 */
+		virtual void set_resource_uri(const std::string &machine, const std::string &resource, const std::string &uri)=0;
+		/*!
+		 * \brief remove resource from machine
+		 */
+		virtual void remove_resource(const std::string &machine, const std::string &resource)=0;
+		/*!
+		 * \brief select most preferable resource uri
+		 */
+		virtual std::string select_resource(const std::string &resource)=0;
+		/*!
+		 * \brief clear all info from hub
 		 */
 		virtual void clear()=0;
 		virtual inline ~hub_container(){}
 	protected:
-		virtual void set_capacity_(const std::string &type, const std::string &uri, const std::string &capacity)=0;
-		virtual void add_resource_(const std::string &type, const std::string &uri, const std::string &capacity)=0;
+		virtual void add_machine_(const std::string &machine, const std::string &capacity)=0;
+		virtual void set_capacity_(const std::string &machine, const std::string &capacity)=0;
 	};
 }}
 

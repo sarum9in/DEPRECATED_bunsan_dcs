@@ -3,7 +3,7 @@
 // factory
 std::shared_ptr<std::map<std::string, std::function<bunsan::dcs::hub_ptr(const boost::property_tree::ptree &)>>> bunsan::dcs::hub::factory;
 
-void bunsan::dcs::hub::register_new(const std::string &type, const std::function<hub_ptr(const boost::property_tree::ptree &)> f)
+bool bunsan::dcs::hub::register_new(const std::string &type, const std::function<hub_ptr(const boost::property_tree::ptree &)> f)
 {
 	if (!factory)
 		factory.reset(new std::map<std::string, std::function<hub_ptr(const boost::property_tree::ptree &)>>);
@@ -11,6 +11,7 @@ void bunsan::dcs::hub::register_new(const std::string &type, const std::function
 		(*factory)[type] = f;
 	else
 		throw std::runtime_error("factory \""+type+"\" was already registered");
+	return true;
 }
 
 bunsan::dcs::hub_ptr bunsan::dcs::hub::instance(const std::string &type, const boost::property_tree::ptree &config)

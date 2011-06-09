@@ -9,7 +9,6 @@
 #include <xmlrpc-c/registry.hpp>
 #include <xmlrpc-c/girerr.hpp>
 
-#include "runner.hpp"
 #include "xmlrpc_service.hpp"
 #include "hub_interface.hpp"
 
@@ -24,16 +23,13 @@ namespace bunsan{namespace dcs{namespace hub_interfaces
 		virtual bunsan::dcs::hub_ptr hub();
 	protected:
 		virtual void create_server();
-		// factory
-		static hub_interface_ptr instance(const boost::property_tree::ptree &config, hub_ptr hub__);
 	private:
 		typedef std::unique_lock<std::mutex> guard;
 		std::mutex lock;
 		unsigned port;
 		registry_ptr registry;
 		hub_ptr hub_;
-		// factory
-		static bunsan::runner reg;
+		static bool factory_reg_hook;
 	};
 }}}
 

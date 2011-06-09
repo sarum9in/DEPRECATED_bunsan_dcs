@@ -24,7 +24,7 @@ namespace bunsan{namespace dcs
 		typedef std::shared_ptr<hub> hub_ptr;
 		static hub_ptr instance(const std::string &type, const boost::property_tree::ptree &config);
 	protected:
-		static void register_new(const std::string &type, const std::function<hub_ptr(const boost::property_tree::ptree &)> f);
+		static bool register_new(const std::string &type, const std::function<hub_ptr(const boost::property_tree::ptree &)> f);
 	private:
 		static std::shared_ptr<std::map<std::string, std::function<hub_ptr(const boost::property_tree::ptree &)>>> factory;
 	};

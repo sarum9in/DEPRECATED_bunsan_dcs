@@ -6,28 +6,18 @@
 
 // factory
 
-bunsan::runner bunsan::dcs::hubs::local::reg(bunsan::dcs::hub::register_new, "local", bunsan::dcs::hubs::local::instance);
-
-bunsan::dcs::hub_ptr bunsan::dcs::hubs::local::instance(const boost::property_tree::ptree &config)
-{
-	hub_ptr tmp(new local(config));
-	return tmp;
-}
+bool bunsan::dcs::hubs::local::factory_reg_hook = bunsan::dcs::hub::register_new("local",
+	[](const boost::property_tree::ptree &config)
+	{
+		bunsan::dcs::hub_ptr tmp(new bunsan::dcs::hubs::local(config));
+		return tmp;
+	});
 
 // virtual class
 
-typedef std::unique_lock<std::mutex> guard;
-
 bunsan::dcs::hubs::local::local(const boost::property_tree::ptree &config)
 {
-#warning empty constructor
-}
-
-void bunsan::dcs::hubs::local::clear()
-{
-	DLOG(clearing hub info);
-	index_type_uri.clear();
-	index_type_capacity_uri.clear();
+	running = false;
 }
 
 bunsan::dcs::hubs::local::~local()
@@ -35,88 +25,130 @@ bunsan::dcs::hubs::local::~local()
 	DLOG(destruction);
 }
 
-#warning not defined
-void bunsan::dcs::hubs::local::start(){}
+// hub_container
 
-void bunsan::dcs::hubs::local::join(){}
-
-void bunsan::dcs::hubs::local::stop(){}
-
-bool bunsan::dcs::hubs::local::is_running()
-{
-#warning not defined
-	return true;
-}
-
-void bunsan::dcs::hubs::local::add_resource_(const std::string &type, const std::string &uri, const std::string &capacity)
+void bunsan::dcs::hubs::local::add_machine_(const std::string &machine, const std::string &capacity)
 {
 	guard lk(lock);
-	SLOG(type<<' '<<uri<<' '<<capacity);
-	DLOG(checking resource existance);
-	if (contains(type, uri))
-		throw std::out_of_range("resource \""+type+"\" with uri=\""+uri+"\" has already been inserted");
-	DLOG(creating resource object);
-	resource_ptr nr(new resource);
-	nr->type = type;
-	nr->uri = uri;
-	nr->capacity = boost::lexical_cast<bunsan::dcs::hubs::local::capacity_t>(capacity);
-	DLOG(created);
-	DLOG(adding object to index);
-	index_type_uri[nr->type][nr->uri] = nr;
-	index_type_capacity_uri[nr->type][nr->capacity][nr->uri] = resource_wptr(nr);
-	DLOG(added);
+	SLOG(machine<<' '<<capacity);
+	capacity_t capacity_ = boost::lexical_cast<capacity_t>(capacity);
+	machine_ptr machine_(new machine_t);
+	machine_->capacity = capacity_;
+	machines[machine] = machine_;
 }
 
-void bunsan::dcs::hubs::local::remove_resource(const std::string &type, const std::string &uri)
+void bunsan::dcs::hubs::local::set_capacity_(const std::string &machine, const std::string &capacity)
 {
 	guard lk(lock);
-	SLOG(type<<' '<<uri);
-	index_type_uri.at(type).erase(uri);
-}
-
-std::string bunsan::dcs::hubs::local::get_resource(const std::string &type)
-{
-	guard lk(lock);
-	SLOG(type);
-	auto current = index_type_capacity_uri.at(type).rbegin();
-	auto end = index_type_capacity_uri.at(type).rend();
-	while (current!=end)
+	SLOG(machine<<' '<<capacity);
+	capacity_t capacity_ = boost::lexical_cast<capacity_t>(capacity);
+	auto iter = machines.find(machine);
+	if (iter==machines.end())
+		throw std::out_of_range("machine \""+machine+"\" was not found");
+	std::swap(iter->second->capacity, capacity_);// now capacity_ contains old value, it may be useful
+	for (const auto &r: iter->second->resource_uri)
 	{
-		while (!current->second.empty() && current->second.begin()->second.expired())
-		{
-			SLOG("found orphan [\""<<type<<"\", \""<<current->second.begin()->first<<"\"] resource, removing");
-			current->second.erase(current->second.begin());
-		}
-		if (!current->second.empty())
-		{
-			SLOG("found \""<<current->second.begin()->second.lock()->uri<<'"');
-			return current->second.begin()->second.lock()->uri;
-		}
-		++current;
+		resources[r.first].insert(std::make_pair(iter->second->capacity, machine_wptr(iter->second)));
 	}
-	SLOG("resource \""<<type<<"\" was not found");
-	throw std::out_of_range("resource \""+type+"\" was not found");
 }
 
-void bunsan::dcs::hubs::local::set_capacity_(const std::string &type, const std::string &uri, const std::string &capacity)
+void bunsan::dcs::hubs::local::remove_machine(const std::string &machine)
 {
 	guard lk(lock);
-	SLOG(type<<' '<<uri<<' '<<capacity);
-	bunsan::dcs::hubs::local::capacity_t nc = boost::lexical_cast<bunsan::dcs::hubs::local::capacity_t>(capacity);
-	if (!contains(type, uri))
-		throw std::out_of_range("resource \""+type+"\" with uri=\""+uri+"\" was not found");
-	index_type_capacity_uri[type][index_type_uri[type][uri]->capacity].erase(uri);
-	index_type_uri[type][uri]->capacity = nc;
-	index_type_capacity_uri[type][nc][uri] = resource_wptr(index_type_uri[type][uri]);
+	SLOG(machine);
+	machines.erase(machine);
 }
 
-bool bunsan::dcs::hubs::local::contains(const std::string &type, const std::string &uri)
+void bunsan::dcs::hubs::local::clear()
 {
-	auto type_iter = index_type_uri.find(type);
-	if (type_iter==index_type_uri.end())
-		return false;
-	if (type_iter->second.find(uri)==type_iter->second.end())
-		return false;
-	return true;
+	guard lk(lock);
+	DLOG();
+	machines.clear();
+	resources.clear();
+}
+
+// resource
+
+void bunsan::dcs::hubs::local::add_resource(const std::string &machine, const std::string &resource, const std::string &uri)
+{
+	guard lk(lock);
+	SLOG(machine<<' '<<resource<<' '<<uri);
+	auto iter = machines.find(machine);
+	if (iter==machines.end())
+		throw std::out_of_range("machine \""+machine+"\" was not found");
+	if (iter->second->resource_uri.find(resource)!=iter->second->resource_uri.end())
+		throw std::out_of_range("resource \""+resource+"\" was already inserted in \""+machine+"\"");
+	iter->second->resource_uri[resource] = uri;
+	resources[resource].insert(std::make_pair(iter->second->capacity, machine_wptr(iter->second)));
+}
+
+void bunsan::dcs::hubs::local::set_resource_uri(const std::string &machine, const std::string &resource, const std::string &uri)
+{
+	guard lk(lock);
+	SLOG(machine<<' '<<resource<<' '<<uri);
+	auto iter = machines.find(machine);
+	if (iter==machines.end())
+		throw std::out_of_range("machine \""+machine+"\" was not found");
+	auto riter = iter->second->resource_uri.find(resource);
+	if (riter==iter->second->resource_uri.end())
+		throw std::out_of_range("resource \""+resource+"\" was not found in \""+machine+"\"");
+	riter->second = uri;
+}
+
+void bunsan::dcs::hubs::local::remove_resource(const std::string &machine, const std::string &resource)
+{
+	guard lk(lock);
+	SLOG(machine<<' '<<resource);
+	auto iter = machines.find(machine);
+	if (iter==machines.end())
+		throw std::out_of_range("machine \""+machine+"\" was not found");
+	if (iter->second->resource_uri.find(resource)==iter->second->resource_uri.end())
+		throw std::out_of_range("resource \""+machine+"\" was not found");
+	iter->second->resource_uri.erase(resource);
+}
+
+// select
+
+std::string bunsan::dcs::hubs::local::select_resource(const std::string &resource)
+{
+	guard lk(lock);
+	SLOG(resource);
+	auto iter = resources.find(resource);
+	bool changed;
+	do
+	{
+		changed = false;
+		while (iter!=resources.end() && !iter->second.empty() && iter->second.begin()->second.expired())
+		{
+			changed = true;
+			SLOG("found orphan resource \""<<iter->first<<"\", removing");
+			iter->second.erase(iter->second.begin());
+		}
+		if (iter!=resources.end() && !iter->second.empty())
+		{
+			machine_ptr machine = iter->second.begin()->second.lock(); // should not be expired since we checked it above
+			if (machine->resource_uri.find(resource)==machine->resource_uri.end())
+			{
+				changed = true;
+				SLOG("found orphan resource \""<<iter->first<<"\", removing");
+				iter->second.erase(iter->second.begin());
+				continue;
+			}
+		}
+		if (iter!=resources.end() && !iter->second.empty())
+		{
+			machine_ptr machine = iter->second.begin()->second.lock(); // see previous
+			if (machine->capacity!=iter->second.begin()->first)
+			{
+				changed = true;
+				SLOG("found orphan resource \""<<iter->first<<"\", removing");
+				iter->second.erase(iter->second.begin());
+				continue;
+			}
+		}
+	} while (changed);
+	if (iter==resources.end() || iter->second.empty() || iter->second.begin()->second.expired())// last condition is not needed
+		throw std::out_of_range("resource \""+resource+"\" was not found");
+	return iter->second.begin()->second.lock()->resource_uri.at(resource);
 }
 
