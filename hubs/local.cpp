@@ -58,7 +58,10 @@ void bunsan::dcs::hubs::local::remove_machine(const std::string &machine)
 {
 	guard lk(lock);
 	SLOG(machine);
-	machines.erase(machine);
+	auto iter = machines.find(machine);
+	if (iter==machines.end())
+		throw std::out_of_range("machine \""+machine+"\" was not found");
+	machines.erase(iter);
 }
 
 void bunsan::dcs::hubs::local::clear()
