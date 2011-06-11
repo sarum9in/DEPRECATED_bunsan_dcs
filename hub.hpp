@@ -12,6 +12,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "service.hpp"
+#include "factory.hpp"
 
 #include "hub_container.hpp"
 
@@ -22,11 +23,17 @@ namespace bunsan{namespace dcs
 	public:
 		// factory
 		typedef std::shared_ptr<hub> hub_ptr;
-		static hub_ptr instance(const std::string &type, const boost::property_tree::ptree &config);
+		static inline hub_ptr instance(const std::string &type, const boost::property_tree::ptree &config)
+		{
+			return bunsan::factory::instance(factories, type, std::cref(config));
+		}
 	protected:
-		static bool register_new(const std::string &type, const std::function<hub_ptr(const boost::property_tree::ptree &)> f);
+		static inline bool register_new(const std::string &type, const std::function<hub_ptr(const boost::property_tree::ptree &)> f)
+		{
+			return bunsan::factory::register_new(factories, type, f);
+		}
 	private:
-		static std::shared_ptr<std::map<std::string, std::function<hub_ptr(const boost::property_tree::ptree &)>>> factory;
+		static std::map<std::string, std::function<hub_ptr(const boost::property_tree::ptree &)>> *factories;
 	};
 	typedef hub::hub_ptr hub_ptr;
 }}
