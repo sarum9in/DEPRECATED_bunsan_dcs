@@ -31,7 +31,7 @@ message("We have to check pthread library on win* platform")
 #target_link_libraries (${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} pthread)
 
-add_definitions(-std=c++0x -pthread -g)
+add_definitions(-std=c++0x -pthread -g -D_GLIBCXX_USE_NANOSLEEP)
 
 if (NOT TARGET bunsan_common)
 	add_subdirectory(${BUNSAN_COMMON_DIR} ${PROJECT_BINARY_DIR}/common EXCLUDE_FROM_ALL)
@@ -43,12 +43,8 @@ aux_source_directory(. srcs)
 aux_source_directory(hubs hubs_srcs)
 aux_source_directory(hub_interfaces hub_interfaces_srcs)
 
-foreach(src ${srcs})
-	if (NOT ${src} MATCHES "main.cpp$")
-		set(lib_srcs ${lib_srcs} ${src})
-		#message("${src}")
-	endif()
-endforeach()
+set(lib_srcs ${srcs})
+list(REMOVE_ITEM lib_srcs "./main.cpp")
 
 add_library(${PROJECT_NAME} SHARED ${lib_srcs} ${hubs_srcs} ${hub_interfaces_srcs})
 target_link_libraries(${PROJECT_NAME} bunsan_common ${Boost_LIBRARIES} ${xmlrpc_link_lib})
