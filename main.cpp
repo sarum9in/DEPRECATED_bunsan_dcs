@@ -5,9 +5,9 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/info_parser.hpp>
 
-#include "util.hpp"
-#include "hub.hpp"
-#include "hub_interface.hpp"
+#include "bunsan/util.hpp"
+#include "bunsan/dcs/hub.hpp"
+#include "bunsan/dcs/hub_interface.hpp"
 
 int main(int argc, char **argv)
 {

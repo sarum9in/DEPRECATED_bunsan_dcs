@@ -11,10 +11,10 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
-#include "service.hpp"
-#include "factory.hpp"
+#include "bunsan/service.hpp"
+#include "bunsan/factory.hpp"
 
-#include "hub_container.hpp"
+#include "bunsan/dcs/hub_container.hpp"
 
 namespace bunsan{namespace dcs
 {

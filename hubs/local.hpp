@@ -11,8 +11,9 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-#include "pseudo_service.hpp"
-#include "hub.hpp"
+#include "bunsan/pseudo_service.hpp"
+
+#include "bunsan/dcs/hub.hpp"
 
 namespace bunsan{namespace dcs{namespace hubs
 {

@@ -4,10 +4,10 @@
 #include <boost/noncopyable.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-#include "service.hpp"
-#include "factory.hpp"
+#include "bunsan/service.hpp"
+#include "bunsan/factory.hpp"
 
-#include "hub.hpp"
+#include "bunsan/dcs/hub.hpp"
 
 namespace bunsan{namespace dcs
 {

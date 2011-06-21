@@ -1,5 +1,3 @@
-#include "hub_interface.hpp"
-
 #include <thread>
 #include <mutex>
 
@@ -9,8 +7,9 @@
 #include <xmlrpc-c/registry.hpp>
 #include <xmlrpc-c/girerr.hpp>
 
-#include "xmlrpc_service.hpp"
-#include "hub_interface.hpp"
+#include "bunsan/xmlrpc_service.hpp"
+
+#include "bunsan/dcs/hub_interface.hpp"
 
 namespace bunsan{namespace dcs{namespace hub_interfaces
 {
