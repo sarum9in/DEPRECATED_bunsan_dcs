@@ -5,41 +5,6 @@
 
 namespace bunsan{namespace dcs
 {
-	template <typename I>
-	std::string get_integer(const I &integer_)
-	{
-		std::string integer = boost::lexical_cast<std::string>(integer_);
-		bool bad = false;
-		std::string reason;
-		if (integer.empty())
-		{
-			reason = "empty integer";
-			bad = true;
-		}
-		else
-		{
-			auto i = integer.cbegin();
-			bool has_sign = integer[0]=='+' || integer[0]=='-';
-			if (has_sign)
-				++i;
-			if (i==integer.cend())
-			{
-				reason = "only sign";
-				bad = true;
-			}
-			else
-			{
-				if (!all_of(i, integer.cend(), boost::algorithm::is_digit()))
-				{
-					bad = true;
-					reason = "non-digit char";
-				}
-			}
-		}
-		if (bad)
-			throw std::invalid_argument("invalid integer [\""+integer+"\"], reason: \""+reason+"\"");
-		return integer;
-	}
 	class hub_container
 	{
 	public:
@@ -97,7 +62,44 @@ namespace bunsan{namespace dcs
 	protected:
 		virtual void add_machine_(const std::string &machine, const std::string &capacity)=0;
 		virtual void set_capacity_(const std::string &machine, const std::string &capacity)=0;
+		template <typename I>
+		std::string get_integer(const I &integer_);
 	};
+	template <typename I>
+	std::string hub_container::get_integer(const I &integer_)
+	{
+		std::string integer = boost::lexical_cast<std::string>(integer_);
+		bool bad = false;
+		std::string reason;
+		if (integer.empty())
+		{
+			reason = "empty integer";
+			bad = true;
+		}
+		else
+		{
+			auto i = integer.cbegin();
+			bool has_sign = integer[0]=='+' || integer[0]=='-';
+			if (has_sign)
+				++i;
+			if (i==integer.cend())
+			{
+				reason = "only sign";
+				bad = true;
+			}
+			else
+			{
+				if (!all_of(i, integer.cend(), boost::algorithm::is_digit()))
+				{
+					bad = true;
+					reason = "non-digit char";
+				}
+			}
+		}
+		if (bad)
+			throw std::invalid_argument("invalid integer [\""+integer+"\"], reason: \""+reason+"\"");
+		return integer;
+	}
 }}
 
 #endif //HUB_CONTAINER_HPP
