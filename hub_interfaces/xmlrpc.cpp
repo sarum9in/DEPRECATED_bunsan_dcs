@@ -26,205 +26,208 @@ bool bunsan::dcs::hub_interfaces::xmlrpc::factory_reg_hook = bunsan::dcs::hub_in
 
 // machine
 
-class method_add_machine: public xmlrpc_c::method2
+namespace
 {
-public:
-	method_add_machine(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
-	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	class method_add_machine: public xmlrpc_c::method2
 	{
-		DLOG();
-		try
+	public:
+		method_add_machine(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
+		virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 		{
-			std::string machine = param_list.getString(0);
-			std::string capacity = param_list.getString(1);
-			param_list.verifyEnd(2);
-			hub_->add_machine(machine, capacity);
-			*result = xmlrpc_c::value_nil();
+			DLOG();
+			try
+			{
+				std::string machine = param_list.getString(0);
+				std::string capacity = param_list.getString(1);
+				param_list.verifyEnd(2);
+				hub_->add_machine(machine, capacity);
+				*result = xmlrpc_c::value_nil();
+			}
+			catch(std::exception &e)
+			{
+				SLOG("fault: \""<<e.what()<<"\"");
+				throw xmlrpc_c::fault(e.what());
+			}
 		}
-		catch(std::exception &e)
-		{
-			SLOG("fault: \""<<e.what()<<"\"");
-			throw xmlrpc_c::fault(e.what());
-		}
-	}
-private:
-	bunsan::dcs::hub_ptr hub_;
-};
+	private:
+		bunsan::dcs::hub_ptr hub_;
+	};
 
-class method_set_capacity: public xmlrpc_c::method2
-{
-public:
-	method_set_capacity(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
-	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	class method_set_capacity: public xmlrpc_c::method2
 	{
-		DLOG();
-		try
+	public:
+		method_set_capacity(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
+		virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 		{
-			std::string machine = param_list.getString(0);
-			std::string capacity = param_list.getString(1);
-			param_list.verifyEnd(2);
-			hub_->set_capacity(machine, capacity);
-			*result = xmlrpc_c::value_nil();
+			DLOG();
+			try
+			{
+				std::string machine = param_list.getString(0);
+				std::string capacity = param_list.getString(1);
+				param_list.verifyEnd(2);
+				hub_->set_capacity(machine, capacity);
+				*result = xmlrpc_c::value_nil();
+			}
+			catch(std::exception &e)
+			{
+				SLOG("fault: \""<<e.what()<<"\"");
+				throw xmlrpc_c::fault(e.what());
+			}
 		}
-		catch(std::exception &e)
-		{
-			SLOG("fault: \""<<e.what()<<"\"");
-			throw xmlrpc_c::fault(e.what());
-		}
-	}
-private:
-	bunsan::dcs::hub_ptr hub_;
-};
+	private:
+		bunsan::dcs::hub_ptr hub_;
+	};
 
-class method_remove_machine: public xmlrpc_c::method2
-{
-public:
-	method_remove_machine(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
-	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	class method_remove_machine: public xmlrpc_c::method2
 	{
-		DLOG();
-		try
+	public:
+		method_remove_machine(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
+		virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 		{
-			std::string machine = param_list.getString(0);
-			param_list.verifyEnd(1);
-			hub_->remove_machine(machine);
-			*result = xmlrpc_c::value_nil();
+			DLOG();
+			try
+			{
+				std::string machine = param_list.getString(0);
+				param_list.verifyEnd(1);
+				hub_->remove_machine(machine);
+				*result = xmlrpc_c::value_nil();
+			}
+			catch(std::exception &e)
+			{
+				SLOG("fault: \""<<e.what()<<"\"");
+				throw xmlrpc_c::fault(e.what());
+			}
 		}
-		catch(std::exception &e)
-		{
-			SLOG("fault: \""<<e.what()<<"\"");
-			throw xmlrpc_c::fault(e.what());
-		}
-	}
-private:
-	bunsan::dcs::hub_ptr hub_;
-};
+	private:
+		bunsan::dcs::hub_ptr hub_;
+	};
 
-class method_clear: public xmlrpc_c::method2
-{
-public:
-	method_clear(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
-	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	class method_clear: public xmlrpc_c::method2
 	{
-		DLOG();
-		try
+	public:
+		method_clear(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
+		virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 		{
-			param_list.verifyEnd(0);
-			hub_->clear();
-			*result = xmlrpc_c::value_nil();
+			DLOG();
+			try
+			{
+				param_list.verifyEnd(0);
+				hub_->clear();
+				*result = xmlrpc_c::value_nil();
+			}
+			catch(std::exception &e)
+			{
+				SLOG("fault: \""<<e.what()<<"\"");
+				throw xmlrpc_c::fault(e.what());
+			}
 		}
-		catch(std::exception &e)
-		{
-			SLOG("fault: \""<<e.what()<<"\"");
-			throw xmlrpc_c::fault(e.what());
-		}
-	}
-private:
-	bunsan::dcs::hub_ptr hub_;
-};
+	private:
+		bunsan::dcs::hub_ptr hub_;
+	};
 
-// resource
+	// resource
 
-class method_add_resource: public xmlrpc_c::method2
-{
-public:
-	method_add_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
-	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	class method_add_resource: public xmlrpc_c::method2
 	{
-		DLOG();
-		try
+	public:
+		method_add_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
+		virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 		{
-			std::string machine = param_list.getString(0);
-			std::string resource = param_list.getString(1);
-			std::string uri = param_list.getString(2);
-			param_list.verifyEnd(3);
-			hub_->add_resource(machine, resource, uri);
-			*result = xmlrpc_c::value_nil();
+			DLOG();
+			try
+			{
+				std::string machine = param_list.getString(0);
+				std::string resource = param_list.getString(1);
+				std::string uri = param_list.getString(2);
+				param_list.verifyEnd(3);
+				hub_->add_resource(machine, resource, uri);
+				*result = xmlrpc_c::value_nil();
+			}
+			catch(std::exception &e)
+			{
+				SLOG("fault: \""<<e.what()<<"\"");
+				throw xmlrpc_c::fault(e.what());
+			}
 		}
-		catch(std::exception &e)
-		{
-			SLOG("fault: \""<<e.what()<<"\"");
-			throw xmlrpc_c::fault(e.what());
-		}
-	}
-private:
-	bunsan::dcs::hub_ptr hub_;
-};
+	private:
+		bunsan::dcs::hub_ptr hub_;
+	};
 
 
-class method_set_resource_uri: public xmlrpc_c::method2
-{
-public:
-	method_set_resource_uri(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
-	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	class method_set_resource_uri: public xmlrpc_c::method2
 	{
-		DLOG();
-		try
+	public:
+		method_set_resource_uri(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
+		virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 		{
-			std::string machine = param_list.getString(0);
-			std::string resource = param_list.getString(1);
-			std::string uri = param_list.getString(2);
-			param_list.verifyEnd(3);
-			hub_->set_resource_uri(machine, resource, uri);
-			*result = xmlrpc_c::value_nil();
+			DLOG();
+			try
+			{
+				std::string machine = param_list.getString(0);
+				std::string resource = param_list.getString(1);
+				std::string uri = param_list.getString(2);
+				param_list.verifyEnd(3);
+				hub_->set_resource_uri(machine, resource, uri);
+				*result = xmlrpc_c::value_nil();
+			}
+			catch(std::exception &e)
+			{
+				SLOG("fault: \""<<e.what()<<"\"");
+				throw xmlrpc_c::fault(e.what());
+			}
 		}
-		catch(std::exception &e)
-		{
-			SLOG("fault: \""<<e.what()<<"\"");
-			throw xmlrpc_c::fault(e.what());
-		}
-	}
-private:
-	bunsan::dcs::hub_ptr hub_;
-};
+	private:
+		bunsan::dcs::hub_ptr hub_;
+	};
 
-class method_remove_resource: public xmlrpc_c::method2
-{
-public:
-	method_remove_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
-	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	class method_remove_resource: public xmlrpc_c::method2
 	{
-		DLOG();
-		try
+	public:
+		method_remove_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
+		virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 		{
-			std::string machine = param_list.getString(0);
-			std::string resource = param_list.getString(1);
-			param_list.verifyEnd(2);
-			hub_->remove_resource(machine, resource);
-			*result = xmlrpc_c::value_nil();
+			DLOG();
+			try
+			{
+				std::string machine = param_list.getString(0);
+				std::string resource = param_list.getString(1);
+				param_list.verifyEnd(2);
+				hub_->remove_resource(machine, resource);
+				*result = xmlrpc_c::value_nil();
+			}
+			catch(std::exception &e)
+			{
+				SLOG("fault: \""<<e.what()<<"\"");
+				throw xmlrpc_c::fault(e.what());
+			}
 		}
-		catch(std::exception &e)
-		{
-			SLOG("fault: \""<<e.what()<<"\"");
-			throw xmlrpc_c::fault(e.what());
-		}
-	}
-private:
-	bunsan::dcs::hub_ptr hub_;
-};
+	private:
+		bunsan::dcs::hub_ptr hub_;
+	};
 
-class method_select_resource: public xmlrpc_c::method2
-{
-public:
-	method_select_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
-	virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
+	class method_select_resource: public xmlrpc_c::method2
 	{
-		DLOG();
-		try
+	public:
+		method_select_resource(bunsan::dcs::hub_ptr hub__):hub_(hub__){}
+		virtual void execute(const xmlrpc_c::paramList &param_list, const xmlrpc_c::callInfo *call_info, xmlrpc_c::value *result)
 		{
-			std::string resource = param_list.getString(0);
-			param_list.verifyEnd(1);
-			*result = xmlrpc_c::value_string(hub_->select_resource(resource));
+			DLOG();
+			try
+			{
+				std::string resource = param_list.getString(0);
+				param_list.verifyEnd(1);
+				*result = xmlrpc_c::value_string(hub_->select_resource(resource));
+			}
+			catch(std::exception &e)
+			{
+				SLOG("fault: \""<<e.what()<<"\"");
+				throw xmlrpc_c::fault(e.what());
+			}
 		}
-		catch(std::exception &e)
-		{
-			SLOG("fault: \""<<e.what()<<"\"");
-			throw xmlrpc_c::fault(e.what());
-		}
-	}
-private:
-	bunsan::dcs::hub_ptr hub_;
-};
+	private:
+		bunsan::dcs::hub_ptr hub_;
+	};
+}
 
 void bunsan::dcs::hub_interfaces::xmlrpc::create_server()
 {
