@@ -23,25 +23,22 @@ include_directories(${Boost_INCLUDE_DIRS})
 #include_directories(/usr/local/include)
 #link_directories(/usr/local/lib)
 message("We have to check pthread library on win* platform")
-#find_package (Threads)
-#target_link_libraries (${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+#find_package(Threads)
+#target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} pthread)
 
 add_definitions(-std=c++0x -pthread -g -D_GLIBCXX_USE_NANOSLEEP)
 
 include_directories(include)
 
-aux_source_directory(. srcs)
-aux_source_directory(hubs hubs_srcs)
-aux_source_directory(hub_interfaces hub_interfaces_srcs)
-
-set(lib_srcs ${srcs})
-list(REMOVE_ITEM lib_srcs "./main.cpp")
+aux_source_directory(src/lib lib_srcs)
+aux_source_directory(src/hubs hubs_srcs)
+aux_source_directory(src/hub_interfaces hub_interfaces_srcs)
 
 add_library(${PROJECT_NAME} SHARED ${lib_srcs} ${hubs_srcs} ${hub_interfaces_srcs})
 target_link_libraries(${PROJECT_NAME} bunsan_common ${Boost_LIBRARIES} ${xmlrpc_link_lib})
 
-add_executable(dcs main.cpp)
+add_executable(dcs src/main.cpp)
 target_link_libraries(dcs ${PROJECT_NAME})
 
 # install
