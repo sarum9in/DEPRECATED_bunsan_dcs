@@ -63,7 +63,7 @@ namespace bunsan{namespace dcs
 		virtual void add_machine_(const std::string &machine, const std::string &capacity)=0;
 		virtual void set_capacity_(const std::string &machine, const std::string &capacity)=0;
 		template <typename I>
-		std::string get_integer(const I &integer_);
+		static std::string get_integer(const I &integer_);
 	};
 	template <typename I>
 	std::string hub_container::get_integer(const I &integer_)
@@ -78,8 +78,8 @@ namespace bunsan{namespace dcs
 		}
 		else
 		{
-			auto i = integer.cbegin();
 			bool has_sign = integer[0]=='+' || integer[0]=='-';
+			auto i = integer.cbegin();
 			if (has_sign)
 				++i;
 			if (i==integer.cend())
