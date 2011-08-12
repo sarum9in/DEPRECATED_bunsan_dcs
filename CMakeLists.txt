@@ -32,8 +32,8 @@ add_definitions(-std=c++0x -pthread -g -D_GLIBCXX_USE_NANOSLEEP)
 include_directories(include)
 
 aux_source_directory(src/lib lib_srcs)
-aux_source_directory(src/hubs hubs_srcs)
-aux_source_directory(src/hub_interfaces hub_interfaces_srcs)
+aux_source_directory(src/lib/hubs hubs_srcs)
+aux_source_directory(src/lib/hub_interfaces hub_interfaces_srcs)
 
 add_library(${PROJECT_NAME} SHARED ${lib_srcs} ${hubs_srcs} ${hub_interfaces_srcs})
 target_link_libraries(${PROJECT_NAME} bunsan_common ${Boost_LIBRARIES} ${xmlrpc_link_lib})
