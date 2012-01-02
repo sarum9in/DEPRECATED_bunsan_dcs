@@ -30,8 +30,12 @@ target_link_libraries(dcs ${PROJECT_NAME})
 # install
 
 install(DIRECTORY include DESTINATION .)
-install(TARGETS ${PROJECT_NAME} DESTINATION lib)
-install(TARGETS dcs DESTINATION bin)
+install(TARGETS
+	dcs
+	${PROJECT_NAME}
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib)
 
 # testing
 
