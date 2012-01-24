@@ -1,3 +1,6 @@
+#ifndef SRC_LIB_HUB_INTERFACES_XMLRPC_HPP
+#define SRC_LIB_HUB_INTERFACES_XMLRPC_HPP
+
 #include <thread>
 #include <mutex>
 
@@ -18,7 +21,7 @@ namespace bunsan{namespace dcs{namespace hub_interfaces
 		typedef xmlrpc_c::registryPtr registry_ptr;
 		typedef std::shared_ptr<xmlrpc_c::serverAbyss> server_ptr;
 	public:
-		xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__);
+		xmlrpc(const boost::property_tree::ptree &config, const hub_ptr &hub__);
 		virtual bunsan::dcs::hub_ptr hub();
 	protected:
 		virtual void create_server();
@@ -31,4 +34,6 @@ namespace bunsan{namespace dcs{namespace hub_interfaces
 		static bool factory_reg_hook;
 	};
 }}}
+
+#endif //SRC_LIB_HUB_INTERFACES_XMLRPC_HPP
 

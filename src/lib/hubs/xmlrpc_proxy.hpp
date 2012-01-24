@@ -1,5 +1,5 @@
-#ifndef XMLRPC_PROXY_HPP
-#define XMLRPC_PROXY_HPP
+#ifndef SRC_LIB_HUBS_XMLRPC_PROXY_HPP
+#define SRC_LIB_HUBS_XMLRPC_PROXY_HPP
 
 #include <boost/property_tree/ptree.hpp>
 
@@ -36,5 +36,5 @@ namespace bunsan{namespace dcs{namespace hubs
 	};
 }}}
 
-#endif //XMLRPC_PROXY_HPP
+#endif //SRC_LIB_HUBS_XMLRPC_PROXY_HPP
 

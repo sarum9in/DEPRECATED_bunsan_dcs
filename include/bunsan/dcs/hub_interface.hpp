@@ -12,24 +12,10 @@
 namespace bunsan{namespace dcs
 {
 	class hub_interface: virtual public bunsan::service, private boost::noncopyable
-	{
+	BUNSAN_FACTORY_BEGIN(hub_interface, const boost::property_tree::ptree &, const bunsan::dcs::hub_ptr &)
 	public:
 		virtual bunsan::dcs::hub_ptr hub()=0;
-		// factory
-		typedef std::shared_ptr<hub_interface> hub_interface_ptr;
-		static inline hub_interface_ptr instance(const std::string &type, const boost::property_tree::ptree &config, bunsan::dcs::hub_ptr hub_)
-		{
-			return bunsan::factory::instance(factories, type, std::cref(config), std::ref(hub_));
-		}
-	protected:
-		static inline bool register_new(const std::string &type, const std::function<hub_interface_ptr(const boost::property_tree::ptree &, bunsan::dcs::hub_ptr)> f)
-		{
-			return bunsan::factory::register_new(factories, type, f);
-		}
-	private:
-		static std::map<std::string, std::function<hub_interface_ptr(const boost::property_tree::ptree &, bunsan::dcs::hub_ptr)>> *factories;
-	};
-	typedef hub_interface::hub_interface_ptr hub_interface_ptr;
+	BUNSAN_FACTORY_END(hub_interface)
 }}
 
 #endif //HUB_INTERFACE_HPP

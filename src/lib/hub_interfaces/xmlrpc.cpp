@@ -14,7 +14,7 @@
 // factory
 
 bool bunsan::dcs::hub_interfaces::xmlrpc::factory_reg_hook = bunsan::dcs::hub_interface::register_new("xmlrpc",
-	[](const boost::property_tree::ptree &config, bunsan::dcs::hub_ptr hub__)
+	[](const boost::property_tree::ptree &config, const bunsan::dcs::hub_ptr &hub__)
 	{
 		bunsan::dcs::hub_interface_ptr tmp(new bunsan::dcs::hub_interfaces::xmlrpc(config, hub__));
 		return tmp;
@@ -234,7 +234,8 @@ void bunsan::dcs::hub_interfaces::xmlrpc::create_server()
 	server.reset(new xmlrpc_c::serverAbyss(xmlrpc_c::serverAbyss::constrOpt().registryPtr(registry).portNumber(port)));
 }
 
-bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, hub_ptr hub__):hub_(hub__), port(config.get<unsigned int>("server.port")), registry(new xmlrpc_c::registry)
+bunsan::dcs::hub_interfaces::xmlrpc::xmlrpc(const boost::property_tree::ptree &config, const hub_ptr &hub__):
+	hub_(hub__), port(config.get<unsigned int>("server.port")), registry(new xmlrpc_c::registry)
 {
 	xmlrpc_c::methodPtr
 		add_machine(new method_add_machine(hub_)),

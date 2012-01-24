@@ -1,5 +1,5 @@
-#ifndef LOCAL_HPP
-#define LOCAL_HPP
+#ifndef SRC_LIB_HUBS_LOCAL_HPP
+#define SRC_LIB_HUBS_LOCAL_HPP
 
 #include <string>
 #include <vector>
@@ -59,5 +59,5 @@ namespace bunsan{namespace dcs{namespace hubs
 	};
 }}}
 
-#endif //LOCAL_HPP
+#endif //SRC_LIB_HUBS_LOCAL_HPP
 
