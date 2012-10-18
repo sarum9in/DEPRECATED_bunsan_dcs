@@ -1,26 +1,26 @@
 
 hub
 {
-	type local
-	config
-	{
-	}
-	;type lan
-	;config
-	;{
-	;	port 3212
-	;	node server
-	;}
+    type local
+    config
+    {
+    }
+    ;type lan
+    ;config
+    ;{
+    ;   port 3212
+    ;   node server
+    ;}
 }
 interface
 {
-	type xmlrpc
-	config
-	{
-		server
-		{
-			port 1924
-		}
-	}
+    type xmlrpc
+    config
+    {
+        server
+        {
+            port 1924
+        }
+    }
 }
 

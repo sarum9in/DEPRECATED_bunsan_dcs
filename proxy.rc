@@ -1,21 +1,21 @@
 
 hub
 {
-	type xmlrpc_proxy
-	config
-	{
-		server_url "http://localhost:1924/RPC2"
-	}
+    type xmlrpc_proxy
+    config
+    {
+        server_url "http://localhost:1924/RPC2"
+    }
 }
 
 interface
 {
-	type xmlrpc
-	config
-	{
-		server
-		{
-			port 1925
-		}
-	}
+    type xmlrpc
+    config
+    {
+        server
+        {
+            port 1925
+        }
+    }
 }

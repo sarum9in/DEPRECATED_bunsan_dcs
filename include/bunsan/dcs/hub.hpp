@@ -18,9 +18,9 @@
 
 namespace bunsan{namespace dcs
 {
-	class hub: virtual public hub_container, virtual public bunsan::service, private boost::noncopyable
-	BUNSAN_FACTORY_BEGIN(hub, const boost::property_tree::ptree &)
-	BUNSAN_FACTORY_END(hub)
+    class hub: virtual public hub_container, virtual public bunsan::service, private boost::noncopyable
+    BUNSAN_FACTORY_BEGIN(hub, const boost::property_tree::ptree &)
+    BUNSAN_FACTORY_END(hub)
 }}
 
 #endif //BUNSAN_DCS_HUB_HPP
