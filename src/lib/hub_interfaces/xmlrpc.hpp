@@ -31,7 +31,7 @@ namespace bunsan{namespace dcs{namespace hub_interfaces
         unsigned port;
         registry_ptr registry;
         hub_ptr hub_;
-        static bool factory_reg_hook;
+        static const bool factory_reg_hook;
     };
 }}}
 

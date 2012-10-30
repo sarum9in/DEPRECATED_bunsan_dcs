@@ -32,7 +32,7 @@ namespace bunsan{namespace dcs{namespace hubs
         virtual void set_capacity_(const std::string &machine, const std::string &capacity);
     private:
         const std::string server_url;
-        static bool factory_reg_hook;
+        static const bool factory_reg_hook;
     };
 }}}
 

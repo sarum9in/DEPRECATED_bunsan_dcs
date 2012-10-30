@@ -6,7 +6,7 @@
 
 // factory
 
-bool bunsan::dcs::hubs::xmlrpc_proxy::factory_reg_hook = bunsan::dcs::hub::register_new("xmlrpc_proxy", 
+const bool bunsan::dcs::hubs::xmlrpc_proxy::factory_reg_hook = bunsan::dcs::hub::register_new("xmlrpc_proxy", 
     [](const boost::property_tree::ptree &config)
     {
         bunsan::dcs::hub_ptr tmp(new bunsan::dcs::hubs::xmlrpc_proxy(config));

@@ -6,7 +6,7 @@
 
 // factory
 
-bool bunsan::dcs::hubs::local::factory_reg_hook = bunsan::dcs::hub::register_new("local",
+const bool bunsan::dcs::hubs::local::factory_reg_hook = bunsan::dcs::hub::register_new("local",
     [](const boost::property_tree::ptree &config)
     {
         bunsan::dcs::hub_ptr tmp(new bunsan::dcs::hubs::local(config));

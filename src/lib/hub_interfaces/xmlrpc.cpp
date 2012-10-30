@@ -13,7 +13,7 @@
 
 // factory
 
-bool bunsan::dcs::hub_interfaces::xmlrpc::factory_reg_hook = bunsan::dcs::hub_interface::register_new("xmlrpc",
+const bool bunsan::dcs::hub_interfaces::xmlrpc::factory_reg_hook = bunsan::dcs::hub_interface::register_new("xmlrpc",
     [](const boost::property_tree::ptree &config, const bunsan::dcs::hub_ptr &hub__)
     {
         bunsan::dcs::hub_interface_ptr tmp(new bunsan::dcs::hub_interfaces::xmlrpc(config, hub__));

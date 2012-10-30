@@ -55,7 +55,7 @@ namespace bunsan{namespace dcs{namespace hubs
         std::condition_variable joiner;
         std::map<std::string, machine_ptr> machines;
         std::map<std::string, std::multimap<capacity_t, machine_wptr, std::greater<capacity_t>>> resources;
-        static bool factory_reg_hook;
+        static const bool factory_reg_hook;
     };
 }}}
 
