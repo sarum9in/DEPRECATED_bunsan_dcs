@@ -1,7 +1,7 @@
 #ifndef HUB_CONTAINER_HPP
 #define HUB_CONTAINER_HPP
 
-#include "bunsan/util.hpp"
+#include "bunsan/logging/legacy.hpp"
 
 namespace bunsan{namespace dcs
 {

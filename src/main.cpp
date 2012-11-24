@@ -3,9 +3,9 @@
 
 #include <boost/program_options.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/info_parser.hpp>
 
-#include "bunsan/util.hpp"
+#include "bunsan/property_tree/info_parser.hpp"
+#include "bunsan/logging/legacy.hpp"
 #include "bunsan/dcs/hub.hpp"
 #include "bunsan/dcs/hub_interface.hpp"
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
         //config parse
         DLOG(config parse);
         boost::property_tree::ptree config;
-        bunsan::read_info(config_file, config);
+        bunsan::property_tree::read_info(config_file, config);
         //end parse
         //hub object
         DLOG(creating hub);

@@ -9,7 +9,7 @@
 #include <xmlrpc-c/registry.hpp>
 #include <xmlrpc-c/girerr.hpp>
 
-#include "bunsan/util.hpp"
+#include "bunsan/logging/legacy.hpp"
 
 // factory
 

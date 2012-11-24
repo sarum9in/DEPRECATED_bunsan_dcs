@@ -2,7 +2,7 @@
 
 #include <xmlrpc-c/client_simple.hpp>
 
-#include "bunsan/util.hpp"
+#include "bunsan/logging/legacy.hpp"
 
 // factory
 
