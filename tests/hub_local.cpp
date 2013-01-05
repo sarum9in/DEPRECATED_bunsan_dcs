@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     using namespace boost::property_tree;
     using namespace bunsan::dcs;
     ptree config;
-    hub_ptr local = hub::instance("local", config);
+    const hub_ptr local = hub::instance("local", config);
     local->start();
     local->add_machine("local0", 0);
     try
@@ -20,25 +20,25 @@ int main(int argc, char **argv)
         local->add_machine("local0", 0);
         assert(false);
     }
-    catch (std::exception &e){}
+    catch (std::exception &e) {}
     local->add_resource("local0", "gcc", "gcc0_uri");
     local->add_machine("local1", 0);
     local->add_resource("local1", "gcc", "gcc1_uri");
     string r = local->select_resource("gcc");
-    assert(r=="gcc0_uri" || r=="gcc1_uri");
+    assert(r == "gcc0_uri" || r == "gcc1_uri");
     local->set_capacity("local0", 1);
-    assert(local->select_resource("gcc")=="gcc0_uri");
+    assert(local->select_resource("gcc") == "gcc0_uri");
     local->set_capacity("local1", 2);
-    assert(local->select_resource("gcc")=="gcc1_uri");
+    assert(local->select_resource("gcc") == "gcc1_uri");
     local->remove_machine("local1");
-    assert(local->select_resource("gcc")=="gcc0_uri");
+    assert(local->select_resource("gcc") == "gcc0_uri");
     local->remove_machine("local0");
     try
     {
         local->select_resource("gcc");
         assert(false);
     }
-    catch (std::exception &e){}
+    catch (std::exception &e) {}
     local->stop();
 }
 
