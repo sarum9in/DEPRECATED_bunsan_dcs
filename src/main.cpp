@@ -41,15 +41,13 @@ int main(int argc, char **argv)
         //end parse
         //hub object
         DLOG(creating hub);
-        bunsan::dcs::hub_ptr hub = bunsan::dcs::hub::instance(config.get<std::string>("hub.type"), config.get_child("hub.config"));
-        if (!hub)
-            throw std::runtime_error("hub was not created");
+        const bunsan::dcs::hub_ptr hub =
+            bunsan::dcs::hub::instance(config.get<std::string>("hub.type"), config.get_child("hub.config"));
         hub->start();
         //local user interface object
         DLOG(creating hub interface);
-        bunsan::dcs::hub_interface_ptr iface = bunsan::dcs::hub_interface::instance(config.get<std::string>("interface.type"), config.get_child("interface.config"), hub);
-        if (!iface)
-            throw std::runtime_error("hub interface was not created");
+        const bunsan::dcs::hub_interface_ptr iface =
+            bunsan::dcs::hub_interface::instance(config.get<std::string>("interface.type"), config.get_child("interface.config"), hub);
         //start interface in current thread
         DLOG(starting infinite serve);
         iface->start();
